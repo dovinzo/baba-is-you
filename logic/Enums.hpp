@@ -1,0 +1,32 @@
+#ifndef TYPES_HPP
+#define TYPES_HPP
+
+
+enum class physical_type { // not words
+    WALL,
+    WATER,
+    BABA, 
+    FLAG, 
+    ROCK
+};
+
+enum class meaningful_type { // words
+    FLAG, 
+    IS, 
+    BABA,
+    ROCK,
+    PUSH, 
+    YOU
+};
+
+enum class property_type {
+    YOU,
+    PUSH,
+    STOP,
+    WIN
+};
+
+// c'est très laid : si on veux ajouter une propriété, 
+// faut modifier ici et dans Rules.hpp et Rules.cpp
+
+#endif // TYPES_HPP
