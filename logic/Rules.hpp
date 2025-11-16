@@ -59,7 +59,7 @@ public:
     // utilisation : rules[physical_type::WALL].is(push);
     // renvoie true or false selon que WALL est pushable ou pas.
  
-
+friend class Model; // pour que model puisse appeler new_rule
 
 };
 

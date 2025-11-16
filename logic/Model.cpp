@@ -119,6 +119,9 @@ Model::Model(const string& level_file_path) : board(load_level_from_file(level_f
 
 void Model::compute_rules()
 {
+    rules.reset_all();
+
+    
     // on parcours tout le board, et on observe les meaningful elements
     // on en récupère les 3 mots, et on appelle Rules::add_rule
     // on vide les règles avant de commencer

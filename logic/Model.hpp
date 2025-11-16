@@ -28,6 +28,8 @@ private:
     // elle à accès aux membres privés de board (genre add_element) car friend 
 
     void compute_rules();
+    // TO DO est-ce que compute rules doit appelé send new state to controller ? 
+    
 
 public:
     Model(const string& level_file_path); // on initialise le model avec un fichier de niveau
@@ -45,7 +47,7 @@ A) au début de la partie
     c'est à dire sa dimension et ses éléments.
 - initilaiser les règles d'après ce board
 
-DONE 
+A : DONE DONE 
 
 
 B) pendant la partie
