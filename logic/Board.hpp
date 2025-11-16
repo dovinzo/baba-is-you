@@ -12,10 +12,13 @@ class Board
 {
 private:
     vector<vector<vector<BoardElements*>>> current_config; //3D vector to hold pointers to board elements
+    const vector<vector<int>> dimensions; // dimensions of the board
+
+    void add_element(int x, int y, BoardElements* elem); 
 
 public:
-    Board(); // to do : comment on le construit ? on importe un fichier de configuration ?
-    ~Board();
+    Board(const vector<vector<int>> _dimensions); // to do : comment on le construit ? on importe un fichier de configuration ?
+    ~Board(); // TO DO !!!! 
 };
 
 

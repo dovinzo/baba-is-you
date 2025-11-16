@@ -18,11 +18,11 @@ private:
     void move(); // un push est un move
 
     void send_new_state_to_controller(); // après chaque move, on envoie l'état du board et des règles au controller pour affichage
-    
+
 
 
 public:
-    Model(/* constuit le board, et calcule les règles pour chaque niveau */);
+    Model(const string& level_file_path); // on initialise le model avec un fichier de niveau
     ~Model();
 
     void compute_rules();
@@ -34,7 +34,8 @@ public:
 /* 
 le modèle doit : 
 A) au début de la partie
-- construire le board (via un loader de niveau)
+- construire le board (via un loader de niveau) 
+    c'est à dire sa dimension et ses éléments.
 - initilaiser les règles d'après ce board
 
 
