@@ -1,9 +1,12 @@
-#include <vector>
-#include <iostream>
-using namespace std;
-
 #ifndef BOARD_ELEMENTS_HPP
 #define BOARD_ELEMENTS_HPP
+
+#include "Enums.hpp"
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
 
 
 
@@ -18,6 +21,7 @@ protected :
     Board_elements(vector<int> pos) : id(id_counter), position(pos) {
         id_counter++;
     }; 
+    // le constructeur protected empêche l'instanciation directe de cette classe.
 
 public:
     virtual ~Board_elements(); 

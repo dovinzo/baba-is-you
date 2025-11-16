@@ -11,7 +11,7 @@ class BoardElements;
 class Board
 {
 private:
-    vector<vector<vector<BoardElements>>> current_config; //3D vector to hold board elements
+    vector<vector<vector<BoardElements*>>> current_config; //3D vector to hold pointers to board elements
 
 public:
     Board(); // to do : comment on le construit ? on importe un fichier de configuration ?
