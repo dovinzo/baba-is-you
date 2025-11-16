@@ -7,6 +7,10 @@ void Board::add_element(int x, int y, Board_elements* elem)
     current_config[x][y].push_back(elem);
 }
 
+
+
+// TO DO faire un truc propre
+
 // renvoie un vecteur de trois mots
 // nulle : à chaque fois qu'on bouge un meaniglful element
 // on check TOUT le BOARD. peut-être juste une zone autour de l'élément bougé ?
@@ -69,7 +73,7 @@ const vector<vector<meaningful_board_element*>> Board::get_words()
     }
 
     // et on enlève les doublons 
-    
+
     struct SentenceLess {
         bool operator()(const vector<meaningful_board_element*>& a,
                         const vector<meaningful_board_element*>& b) const {

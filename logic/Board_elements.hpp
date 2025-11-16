@@ -25,6 +25,8 @@ protected :
 
 public:
     virtual ~Board_elements(); 
+
+
 };
 
 class physical_board_element : public Board_elements
@@ -33,6 +35,7 @@ private:
     physical_type type;
 public : 
     physical_board_element(physical_type t, vector<int> v) : type(t), Board_elements(v) {};
+    physical_type get_type() const { return type; }
 };
 
 class meaningful_board_element : public Board_elements
@@ -41,6 +44,7 @@ private:
     meaningful_type type;
 public :
     meaningful_board_element(meaningful_type t, vector<int> v) : type(t), Board_elements(v) {};
+    meaningful_type get_type() const { return type; }
 };
 
 #endif // BOARD_ELEMENTS_HPP

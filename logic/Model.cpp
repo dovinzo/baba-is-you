@@ -121,8 +121,16 @@ void Model::compute_rules()
 {
     rules.reset_all();
 
-    
-    // on parcours tout le board, et on observe les meaningful elements
-    // on en récupère les 3 mots, et on appelle Rules::add_rule
-    // on vide les règles avant de commencer
+    const vector<vector<meaningful_board_element*>> words = board.get_words();
+
+    for (const vector<meaningful_board_element*>& row : words) {
+        const size_t row_size = row.size();
+        for (size_t i = 0; i + 2 < row_size; ++i) {
+            meaningful_type word1 = row[i]->get_type();
+            meaningful_type word2 = row[i + 1]->get_type();
+            meaningful_type word3 = row[i + 2]->get_type();
+
+            rules.new_rule(word1, word2, word3);
+        }
+    }
 }
