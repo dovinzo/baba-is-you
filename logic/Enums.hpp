@@ -4,7 +4,6 @@
 
 enum class physical_type { // not words
     WALL,
-    WATER,
     BABA, 
     FLAG, 
     ROCK
@@ -16,7 +15,11 @@ enum class meaningful_type { // words
     BABA,
     ROCK,
     PUSH, 
-    YOU
+    YOU, 
+    WALL,
+    STOP,
+    WIN,
+    COUNT // pour le nombre total de meaningful types
 };
 
 enum class property_type {

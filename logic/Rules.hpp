@@ -35,18 +35,18 @@ private:
 
     // physical props c'est pour les types physiques : "pour tout type physique, pour toute propriété, true or false ?"
     map<physical_type, Property> physical_props;
+    map<meaningful_type, Property> meaningful_props;
 
-    // meaningful props c'est pour les mots, c'est const : un mot est pushable toujours, mais jamais win par exemple. 
-    const map<meaningful_type, Property> meaningful_props = {
-        {meaningful_type::YOU, Property{false, true, false, false}},
-        {meaningful_type::PUSH, Property{false, true, false, false}},
-        {meaningful_type::IS, Property{false, true, false, false}},
-        {meaningful_type::FLAG, Property{false, true, false, false}},
-        {meaningful_type::BABA, Property{false, true, false, false}},
-        {meaningful_type::ROCK, Property{false, true, false, false}}
-    };
 
-    // c'est moche 
+
+    Property& access(physical_type type);
+    // usage dans newrules pour modifier les propriétés + facilement 
+
+    
+    void reset_all();
+
+    void new_rule(meaningful_type word1, meaningful_type word2, meaningful_type word3);
+
     
 public:
     Rules( map<physical_type, Property> initial_physical_props); // TO DO : faut que ça soit secure, qu'on puisse qu'en créer un. 
