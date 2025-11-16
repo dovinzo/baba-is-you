@@ -17,7 +17,7 @@ private:
     void add_element(int x, int y, BoardElements* elem); 
 
 public:
-    Board(const vector<vector<int>> _dimensions); // to do : comment on le construit ? on importe un fichier de configuration ?
+    Board(const vector<vector<int>> _dimensions); 
     ~Board(); // TO DO !!!! 
 };
 
