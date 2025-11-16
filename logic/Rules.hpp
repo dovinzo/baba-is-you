@@ -49,6 +49,7 @@ private:
 
     
 public:
+    Rules(); // par défaut, toutes les propriétés sont à false
     Rules( map<physical_type, Property> initial_physical_props); // TO DO : faut que ça soit secure, qu'on puisse qu'en créer un. 
     ~Rules();
 

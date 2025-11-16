@@ -5,6 +5,10 @@
 #include "Rules.hpp"
 #include "Board.hpp"
 
+#include "Board_elements.hpp"
+// besoin de Board_elements pour construire le board à partir d'un fichier de niveau
+// c'est ok ? 
+
 
 class Model
 {
@@ -19,13 +23,16 @@ private:
 
     void send_new_state_to_controller(); // après chaque move, on envoie l'état du board et des règles au controller pour affichage
 
+    Board load_level_from_file(const string& path); // fonction utilitaire pour charger un niveau à partir d'un fichier ASCII   
+    // déclarée ici parce que comme c'est une fonction de board, 
+    // elle à accès aux membres privés de board (genre add_element) car friend 
 
+    void compute_rules();
 
 public:
     Model(const string& level_file_path); // on initialise le model avec un fichier de niveau
-    ~Model();
+    ~Model(); // TO DO  
 
-    void compute_rules();
 
 };
 
@@ -37,6 +44,8 @@ A) au début de la partie
 - construire le board (via un loader de niveau) 
     c'est à dire sa dimension et ses éléments.
 - initilaiser les règles d'après ce board
+
+DONE 
 
 
 B) pendant la partie

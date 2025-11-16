@@ -26,7 +26,7 @@ vector<string> load_level_ascii(const string& path)
     return lines;
 }
 
-Board load_level_from_file(const string& path)
+Board Model::load_level_from_file(const string& path)
 {
     vector<string> lines = load_level_ascii(path);
     if (lines.empty()) {
@@ -36,7 +36,8 @@ Board load_level_from_file(const string& path)
     int height = static_cast<int>(lines.size());
     int width  = static_cast<int>(lines[0].size());
 
-    Board board(width, height);
+    vector<vector<int>> dimensions = { {width}, {height}}; // z dimension = 1 au début
+    Board board(dimensions);
 
     for (int y = 0; y < height; ++y) {
         const string& row = lines[y];
@@ -49,21 +50,54 @@ Board load_level_from_file(const string& path)
             Board_elements* elem = nullptr;
 
             switch (c) {
-                case '#':
+                case 'PW':
                     elem = new physical_board_element(physical_type::WALL, pos);
                     break;
-                case 'B':
+                case 'PB':
                     elem = new physical_board_element(physical_type::BABA, pos);
                     break;
-                case 'F':
+                case 'PF':
                     elem = new physical_board_element(physical_type::FLAG, pos);
                     break;
-                case 'P':
+                case 'PR':
+                    elem = new physical_board_element(physical_type::ROCK, pos);
+                    break;
+
+                // P c'est pour physical, donc PW correspond à un mur physique
+
+                case 'WF':
                     elem = new meaningful_board_element(meaningful_type::FLAG, pos);
                     break;
+                case 'WI':
+                    elem = new meaningful_board_element(meaningful_type::IS, pos);
+                    break;
+                case 'WB':
+                    elem = new meaningful_board_element(meaningful_type::BABA, pos);
+                    break;
+                case 'WR':
+                    elem = new meaningful_board_element(meaningful_type::ROCK, pos);
+                    break;
+                case 'WY':
+                    elem = new meaningful_board_element(meaningful_type::YOU, pos);
+                    break;
+                case 'WS':
+                    elem = new meaningful_board_element(meaningful_type::STOP, pos);
+                    break;
+                case 'WW':
+                    elem = new meaningful_board_element(meaningful_type::WIN, pos);
+                    break;
+                case 'WP':
+                    elem = new meaningful_board_element(meaningful_type::PUSH, pos);
+                    break;
+                case 'WA':
+                    elem = new meaningful_board_element(meaningful_type::WALL, pos);
+                    break;
+
+
+                
                 case '.':
                 default:
-                    break; // case vide ou caractère inconnu → on ne crée rien
+                    break; 
             }
 
             if (elem != nullptr) {
@@ -82,4 +116,11 @@ Model::Model(const string& level_file_path) : board(load_level_from_file(level_f
 {
     compute_rules();
     send_new_state_to_controller();
+}
+
+void Model::compute_rules()
+{
+    // on parcours tout le board, et on observe les meaningful elements
+    // on en récupère les 3 mots, et on appelle Rules::add_rule
+    // on vide les règles avant de commencer
 }
