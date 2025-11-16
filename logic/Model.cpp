@@ -50,50 +50,49 @@ Board Model::load_level_from_file(const string& path)
             Board_elements* elem = nullptr;
 
             switch (c) {
-                case 'PW':
+                case 'W':
                     elem = new physical_board_element(physical_type::WALL, pos);
                     break;
-                case 'PB':
+                case 'B':
                     elem = new physical_board_element(physical_type::BABA, pos);
                     break;
-                case 'PF':
+                case 'F':
                     elem = new physical_board_element(physical_type::FLAG, pos);
                     break;
-                case 'PR':
+                case 'R':
                     elem = new physical_board_element(physical_type::ROCK, pos);
                     break;
 
-                // P c'est pour physical, donc PW correspond à un mur physique
+                // UPPER CASE c'est pour physical, donc W correspond à un mur physique
 
-                case 'WF':
+                case 'f':
                     elem = new meaningful_board_element(meaningful_type::FLAG, pos);
                     break;
-                case 'WI':
+                case 'i':
                     elem = new meaningful_board_element(meaningful_type::IS, pos);
                     break;
-                case 'WB':
+                case 'b':
                     elem = new meaningful_board_element(meaningful_type::BABA, pos);
                     break;
-                case 'WR':
+                case 'r':
                     elem = new meaningful_board_element(meaningful_type::ROCK, pos);
                     break;
-                case 'WY':
+                case 'y':
                     elem = new meaningful_board_element(meaningful_type::YOU, pos);
                     break;
-                case 'WS':
+                case 's':
                     elem = new meaningful_board_element(meaningful_type::STOP, pos);
                     break;
-                case 'WW':
+                case 'w':
                     elem = new meaningful_board_element(meaningful_type::WIN, pos);
                     break;
-                case 'WP':
+                case 'p':
                     elem = new meaningful_board_element(meaningful_type::PUSH, pos);
                     break;
-                case 'WA':
+                case 'a':
                     elem = new meaningful_board_element(meaningful_type::WALL, pos);
                     break;
-
-
+                    // attention : 'a' pour wall car 'w' est pris par win
                 
                 case '.':
                 default:
