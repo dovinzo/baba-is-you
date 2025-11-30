@@ -6,6 +6,8 @@
 #include "Board.hpp"
 
 #include "Board_elements.hpp"
+#include <string>
+#include <vector>
 // besoin de Board_elements pour construire le board à partir d'un fichier de niveau
 // c'est ok ? 
 
@@ -21,7 +23,6 @@ private:
     // c'est fort : le model contient le board et les rules.
     // c'est surement là que va se jouer l'initialisation du niveau
     
-    void move(char direction /* TO DO direction ? */); // un push est un move
 
 
     Board load_level_from_file(const string& path); // fonction utilitaire pour charger un niveau à partir d'un fichier ASCII   
@@ -36,6 +37,13 @@ public:
     Model(const string& level_file_path); // on initialise le model avec un fichier de niveau
     ~Model(); // TO DO  
     Board board;
+
+    vector<string> get_word_triples();
+
+
+    void move(char direction /* TO DO direction ? */); // un push est un move
+    // to do pas public
+    vector<string> render_board() const;
 
 
 };

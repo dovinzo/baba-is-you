@@ -28,8 +28,12 @@ private:
     
 
 public:
-    Board(const vector<vector<int>> _dimensions); 
+    Board(const vector<int>& _dimensions); 
+    
     ~Board(); // TO DO !!!! 
+
+    void rebuild_from_positions();
+
 
 friend class Model;
 

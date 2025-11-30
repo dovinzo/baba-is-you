@@ -1,5 +1,11 @@
 #include "Rules.hpp"
 
+Rules::Rules()
+    : Rules(std::map<physical_type, Property>{}) {}  // délègue au constructeur existant
+
+Rules::~Rules() = default;
+
+
 const Property& Rules::operator[](physical_type type) const
 {
     static const Property default_property{};  // tout à false
