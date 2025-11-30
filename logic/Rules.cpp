@@ -109,3 +109,21 @@ void Rules::new_rule(meaningful_type word1,
     case property_type::WIN:  p.is_win  = true; break;
     }
 }
+
+vector<physical_type> Rules::get_you_objets()
+{
+    vector<physical_type> you_objects;
+    set<physical_type> seen;
+
+    for (map<physical_type, Property>::const_iterator it = physical_props.begin(); it != physical_props.end(); ++it) {
+        physical_type type = it->first;
+        const Property& prop = it->second;
+
+        if (prop.is_you && seen.find(type) == seen.end()) {
+            you_objects.push_back(type);
+            seen.insert(type);
+        }
+    }
+
+    return you_objects;
+}

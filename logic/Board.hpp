@@ -20,7 +20,7 @@ private:
     /* faire attention aux cast
     parce que les BoardElements* peuvent pointer vers des physical_board_element* ou des rule_board_element*
     */ 
-    const vector<vector<int>> dimensions; // dimensions of the board
+    const vector<int> dimensions; // dimensions of the board
 
     void add_element(int x, int y, Board_elements* elem); 
 

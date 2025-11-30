@@ -21,11 +21,7 @@ private:
     // c'est fort : le model contient le board et les rules.
     // c'est surement là que va se jouer l'initialisation du niveau
     
-    void compute_rules();
-    void move(); // un push est un move
-
-    // controller->is_notified(*this);
-    // à la fin de move. 
+    void move(char direction /* TO DO direction ? */); // un push est un move
 
 
     Board load_level_from_file(const string& path); // fonction utilitaire pour charger un niveau à partir d'un fichier ASCII   

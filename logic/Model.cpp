@@ -133,3 +133,153 @@ void Model::compute_rules()
         }
     }
 }
+
+void Model::move(char direction/* TO DO direction ? */)
+{
+
+    vector<physical_type> you = rules.get_you_objets(); // renvoie les objets movables;
+
+    for (int x = 0; x < board.dimensions[0]; ++x) {
+        for (int y = 0; y < board.dimensions[1]; ++y) {
+            // parcours du board
+            for (Board_elements* elem : board.current_config[x][y]) {
+                physical_board_element* phys_elem = dynamic_cast<physical_board_element*>(elem);
+                if (phys_elem != nullptr) {
+                    physical_type type = phys_elem->get_type();
+                    if (find(you.begin(), you.end(), type) != you.end()) {
+                        // on a un élément de type YOU
+                        vector<Board_elements*> rangee; 
+                        // on empile les éléments en partant de la fin vers où on veux aller
+                        switch (direction) {
+                            
+                            case 'L':
+                                for (int d = 0; d < y; ++d) {
+                                    for (Board_elements* belem : board.current_config[x][d]) {
+                                        rangee.push_back(belem);
+                                }
+                                }
+                                break;
+                            case 'R':
+                                for (int d = y; d < board.dimensions[0]; ++d) {
+                                    for (Board_elements* belem : board.current_config[x][d]) {
+                                        rangee.push_back(belem);
+                                }
+                                }
+                                break;
+                            case 'U':
+                                for (int d = 0; d < x; ++d) {
+                                    for (Board_elements* belem : board.current_config[d][y]) {
+                                        rangee.push_back(belem);
+                                }
+                                }
+                                break;
+                            case 'D':
+                                for (int d = x; d < board.dimensions[1]; ++d) {
+                                    for (Board_elements* belem : board.current_config[d][y]) {
+                                        rangee.push_back(belem);
+                                }
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+
+                        // on a la pile des éléments à déplacer
+
+                         /* on découle la pile en retirant (c'est plutot une file) 
+                            en partant de l'élément you, à partir du moment où on a un truc
+                            du style pas movable, pas stop (ou vide)
+
+                            on vire tout le reste.  
+
+                        */
+
+                        bool dead = false;
+                        for (int k = rangee.size() - 1; k >= 0; --k)
+                        {
+                            Board_elements* belem = rangee[k];
+                            physical_board_element* pbelem = dynamic_cast<physical_board_element*>(belem);
+                            if (pbelem != nullptr) {
+                                physical_type ptype = pbelem->get_type();
+                                if (rules[ptype].is_stop == true) {
+                                    dead = true;
+                                    break;
+                                }
+
+                                if (ptype == physical_type::EMPTY || (rules[ptype].is_push == false && rules[ptype].is_stop == false)) { 
+                                    rangee.erase(rangee.begin(), rangee.begin() + k + 1);
+                                    break;
+                                }
+                        }
+                        }
+
+                        if (!dead) {
+                             // maintenant on a la pile à déplacer
+                            for (Board_elements* belem : rangee) {
+                                switch (direction) {
+                                    case 'L': {
+                                        vector<int> pos = belem->get_position();
+                                        pos[1] -= 1;
+                                        belem->set_position(pos);
+                                        break;
+                                    }
+                                    case 'R': {
+                                        vector<int> pos = belem->get_position();
+                                        pos[1] += 1;
+                                        belem->set_position(pos);
+                                        break;
+                                    }
+                                    case 'U': {
+                                        vector<int> pos = belem->get_position();
+                                        pos[0] -= 1;
+                                        belem->set_position(pos);
+                                        break;
+                                    }
+                                    case 'D': {
+                                        vector<int> pos = belem->get_position();
+                                        pos[0] += 1;
+                                        belem->set_position(pos);
+                                        break;
+                                    }
+                                    default:
+                                        break;
+                                }
+                        }
+
+                       
+                        
+                                                        
+
+                            
+
+
+
+                        
+                            
+                            } 
+
+                        }
+
+                        
+
+                       
+
+                    }
+                }
+            }
+        }
+    
+   // TO DO
+   /*
+   1- faire un push ou un move
+        a) récupérer les éléments YOU
+        b) pour chacun d'eux, essayer de le déplacer dans la direction voulue
+            i) faire une pile
+        c) si c'est possbile, move
+   2- si un meaningful_type a bougé, recompute_rules
+    3- controller->is_notified(*this);
+   */
+
+   compute_rules();
+   //controller->is_notified(*this);
+}

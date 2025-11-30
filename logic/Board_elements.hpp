@@ -20,11 +20,13 @@ private:
 protected :
     Board_elements(vector<int> pos) : id(id_counter), position(pos) {
         id_counter++;
-    }; 
+    };
     // le constructeur protected empêche l'instanciation directe de cette classe.
 
 public:
     virtual ~Board_elements(); 
+    void set_position(const vector<int>& new_pos);
+    vector<int> get_position() const;
 
 
 };

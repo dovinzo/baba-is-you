@@ -3,6 +3,7 @@
 
 #include "Enums.hpp"
 #include <map>
+#include <set>
 using namespace std;
 
 
@@ -52,6 +53,8 @@ public:
     Rules(); // par défaut, toutes les propriétés sont à false
     Rules( map<physical_type, Property> initial_physical_props); // TO DO : faut que ça soit secure, qu'on puisse qu'en créer un. 
     ~Rules();
+
+    vector<physical_type> get_you_objets(); // renvoie les objets movables
 
 
     // objectif : pouvoir faire rules[physical_type::BABA].is_push pour savoir si BABA est pushable.

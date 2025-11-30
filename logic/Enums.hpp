@@ -6,7 +6,8 @@ enum class physical_type { // not words
     WALL,
     BABA, 
     FLAG, 
-    ROCK
+    ROCK,
+    EMPTY
 };
 
 enum class meaningful_type { // words
