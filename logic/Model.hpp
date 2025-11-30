@@ -9,11 +9,14 @@
 // besoin de Board_elements pour construire le board à partir d'un fichier de niveau
 // c'est ok ? 
 
+class controleur;
 
 class Model
 {
 private:
-    Board board;
+    
+     // friend du controleur et de la vue 
+    controleur* controller;
     Rules rules;
     // c'est fort : le model contient le board et les rules.
     // c'est surement là que va se jouer l'initialisation du niveau
@@ -21,7 +24,9 @@ private:
     void compute_rules();
     void move(); // un push est un move
 
-    void send_new_state_to_controller(); // après chaque move, on envoie l'état du board et des règles au controller pour affichage
+    // controller->is_notified(*this);
+    // à la fin de move. 
+
 
     Board load_level_from_file(const string& path); // fonction utilitaire pour charger un niveau à partir d'un fichier ASCII   
     // déclarée ici parce que comme c'est une fonction de board, 
@@ -34,6 +39,7 @@ private:
 public:
     Model(const string& level_file_path); // on initialise le model avec un fichier de niveau
     ~Model(); // TO DO  
+    Board board;
 
 
 };
