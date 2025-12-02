@@ -14,7 +14,6 @@ class Board_elements // virtual class
 {
 private:
     static int id_counter;
-    const int id; // Unique identifier for each board element
     vector<int> position; // (x,y,z), z indique son niveau de superposition : 0 le plus en bas. 
     
 protected :
@@ -24,6 +23,7 @@ protected :
     // le constructeur protected empêche l'instanciation directe de cette classe.
 
 public:
+    const int id; // Unique identifier for each board element
     virtual ~Board_elements(); 
     void set_position(const vector<int>& new_pos);
     vector<int> get_position() const;

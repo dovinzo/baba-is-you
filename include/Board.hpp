@@ -15,11 +15,7 @@ class Model; // pour petre décklaré ami avec Board
 
 class Board
 {
-private:
-    vector<vector<vector<Board_elements*>>> current_config; //3D vector to hold pointers to board elements
-    /* faire attention aux cast
-    parce que les BoardElements* peuvent pointer vers des physical_board_element* ou des rule_board_element*
-    */ 
+private: 
     const vector<int> dimensions; // dimensions of the board
 
     void add_element(int x, int y, Board_elements* elem); 
@@ -28,6 +24,10 @@ private:
     
 
 public:
+    vector<vector<vector<Board_elements*>>> current_config; //3D vector to hold pointers to board elements
+    /* faire attention aux cast
+    parce que les BoardElements* peuvent pointer vers des physical_board_element* ou des rule_board_element*
+    */
     Board(const vector<int>& _dimensions); 
     
     ~Board(); // TO DO !!!! 
