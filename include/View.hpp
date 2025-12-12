@@ -3,6 +3,8 @@
 
 #include <SFML/Graphics.hpp>
 #include "Model.hpp"
+#include "Enums.hpp"
+#include "BoardElement.hpp"
 #include <unordered_map>
 
 /**
@@ -44,24 +46,31 @@ class View
          */
         void draw(sf::RenderWindow& window);
 
+        void createTextures();
+
+        void createSprites(Model& model, sf::RenderWindow& window);
+
+        void createSprite(BoardElement* boardElement, Model& model);
+
+        static float calculateSpritesScale(Model& model);
+
+        static int convertXGridToXScreen(Model& model, int xGrid);
+
+        static int convertYGridToYScreen(Model& model, int yGrid);
+
     private:
 
         /**
-         * @brief Dictionnaire entre les noms des objets pouvant s'afficher
-         *        à l'écran et leur texture correspondante.
-         *
-         *        Liste des textures :
-         *        textures["BABA"], textures["ROCK"], textures["FLAG"],
-         *        textures["WALL"], textures["TEXT_IS"], textures["TEXT_BABA"],
-         *        textures["TEXT_YOU"], textures["TEXT_WALL"], textures["TEXT_PUSH"].
+         * @brief Dictionnaire entre le type des éléments du board
+         *        pouvant s'afficher à l'écran et leur texture correspondante.
          */
-        std::unordered_map<std::string, sf::Texture*> textures;
+        std::unordered_map<BoardElementType, sf::Texture*> textures;
 
         /**
-         * @brief Dictionnaire entre chaque id des objets du modèle et leur sprite
-         *        correspondant permettant d'afficher l'objet du modèle à l'écran.
+         * @brief Dictionnaire entre chaque élément du board et leur sprite
+         *        correspondant permettant d'afficher l'élément du board à l'écran.
          */
-        std::unordered_map<int, sf::Sprite*> sprites;
+        std::unordered_map<BoardElement*, sf::Sprite*> sprites;
 };
 
 #endif

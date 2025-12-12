@@ -1,0 +1,13 @@
+0 <-> BoardElementType::BABA
+1 <-> BoardElementType::WALL
+2 <-> BoardElementType::FLAG
+3 <-> BoardElementType::ROCK
+4 <-> BoardElementType::TEXT_BABA
+5 <-> BoardElementType::TEXT_WALL
+6 <-> BoardElementType::TEXT_FLAG
+7 <-> BoardElementType::TEXT_ROCK
+8 <-> BoardElementType::TEXT_IS
+9 <-> BoardElementType::TEXT_PUSH
+10 <-> BoardElementType::TEXT_YOU
+11 <-> BoardElementType::TEXT_STOP
+12 <-> BoardElementType::TEXT_WIN

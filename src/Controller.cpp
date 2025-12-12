@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 
-void Controller::handleEvent(sf::Event& event, sf::RenderWindow& window, Model& model)
+void Controller::handleEvent(Model& model, sf::Event& event, sf::RenderWindow& window)
 {
     while (window.pollEvent(event))
     {
@@ -11,13 +11,13 @@ void Controller::handleEvent(sf::Event& event, sf::RenderWindow& window, Model& 
         else if (event.type == sf::Event::KeyPressed)
         {
             if (event.key.code == sf::Keyboard::Left)
-                model.move('L');
+                model.moveLeft();
             else if (event.key.code == sf::Keyboard::Right)
-                model.move('R');
+                model.moveRight();
             else if (event.key.code == sf::Keyboard::Up)
-                model.move('U');
+                model.moveUp();
             else if (event.key.code == sf::Keyboard::Down)
-                model.move('D');
+                model.moveDown();
         }
     }
 }

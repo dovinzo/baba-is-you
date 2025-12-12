@@ -1,43 +1,31 @@
 #ifndef BOARD_HPP
-#define BOARD_HPP 
+#define BOARD_HPP
 
+#include "Enums.hpp"
+#include "BoardElement.hpp"
+#include <string>
 #include <vector>
-#include <iostream>
-
-using namespace std;
-
-#include "Board_elements.hpp"
-/* en soit c'est questionnable parce qu'on a
-que des pointeurs, donc on a prioori juste besoin d'énoncer
-la class*/
-
-class Model; // pour petre décklaré ami avec Board
 
 class Board
 {
-private: 
-    const vector<int> dimensions; // dimensions of the board
-
-    void add_element(int x, int y, Board_elements* elem); 
-
-    const vector<vector<meaningful_board_element*>> get_words(); 
-    
-
-public:
-    vector<vector<vector<Board_elements*>>> current_config; //3D vector to hold pointers to board elements
-    /* faire attention aux cast
-    parce que les BoardElements* peuvent pointer vers des physical_board_element* ou des rule_board_element*
-    */
-    Board(const vector<int>& _dimensions); 
-    
-    ~Board(); // TO DO !!!! 
-
-    void rebuild_from_positions();
-
-
-friend class Model;
-
+    friend class View;
+    friend class Model;
+    public:
+        Board();
+        ~Board();
+        void createEmptyGrid(int width, int height);
+        int getWidth() const;
+        int getHeight() const;
+        std::vector<BoardElement*> getCell(int x, int y) const;
+        //int findPositionI(BoardElement* boardElement) const;
+        //int findPositionJ(BoardElement* boardElement) const;
+        void loadLevel(const std::string& filePath);
+        void setNewPosition(BoardElement* boardElement, int xNew, int yNew);
+    private:
+        int width;
+        int height;
+        std::vector<BoardElement*>** grid;
+        void spawnBoardElement(BoardElementType boardElementType, int x, int y);
 };
 
-
-#endif //BOARD_HPP
+#endif

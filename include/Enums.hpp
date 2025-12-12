@@ -1,55 +1,57 @@
-#ifndef TYPES_HPP
-#define TYPES_HPP
+#ifndef ENUMS_HPP
+#define ENUMS_HPP
 
-
-enum class physical_type { // not words
-    WALL,
-    BABA, 
-    FLAG, 
-    ROCK,
-    EMPTY
-};
-
-enum class meaningful_type { // words
-    FLAG, 
-    IS, 
+enum class BoardElementType
+{
     BABA,
-    ROCK,
-    PUSH, 
-    YOU, 
     WALL,
-    STOP,
-    WIN,
-    COUNT // pour le nombre total de meaningful types
+    FLAG,
+    ROCK,
+    TEXT_BABA,
+    TEXT_WALL,
+    TEXT_FLAG,
+    TEXT_ROCK,
+    TEXT_IS,
+    TEXT_PUSH,
+    TEXT_YOU,
+    TEXT_STOP,
+    TEXT_WIN
 };
 
-enum class property_type {
-    YOU,
+enum class BoardElementCategory
+{
+    OBJECT,
+    TEXT_OBJECT,
+    TEXT_IS,
+    TEXT_PROPERTY
+};
+
+enum class Direction
+{
+    LEFT,
+    RIGHT,
+    UP,
+    DOWN
+};
+
+enum class RuleSubject
+{
+    BABA,
+    WALL,
+    FLAG,
+    ROCK
+};
+
+enum class RuleProperty
+{
+    BABA,
+    WALL,
+    FLAG,
+    ROCK,
     PUSH,
+    YOU,
     STOP,
     WIN
 };
 
-inline char meaningful_char(meaningful_type t)
-{
-    switch (t) {
-        case meaningful_type::FLAG: return 'f';
-        case meaningful_type::IS:   return 'i';
-        case meaningful_type::BABA: return 'b';
-        case meaningful_type::ROCK: return 'r';
-        case meaningful_type::PUSH: return 'p';
-        case meaningful_type::YOU:  return 'y';
-        case meaningful_type::WALL: return 'a'; 
-        case meaningful_type::STOP: return 's';
-        case meaningful_type::WIN:  return 'w';
-        case meaningful_type::COUNT:return '?';
-    }
-    return '?';
-}
-
-
-
-// c'est très laid : si on veux ajouter une propriété, 
-// faut modifier ici et dans Rules.hpp et Rules.cpp
-
-#endif // TYPES_HPP
+#endif

@@ -1,73 +1,169 @@
-#ifndef LOGIC_MODEL_HPP
-#define LOGIC_MODEL_HPP
+#ifndef MODEL_HPP
+#define MODEL_HPP
 
-
-#include "Rules.hpp"
 #include "Board.hpp"
-
-#include "Board_elements.hpp"
-#include <string>
+#include "Rules.hpp"
+#include "Enums.hpp"
+#include "BoardElement.hpp"
 #include <vector>
-// besoin de Board_elements pour construire le board à partir d'un fichier de niveau
-// c'est ok ? 
-
-class controleur;
+#include <set>
 
 class Model
 {
-private:
-    
-     // friend du controleur et de la vue 
-    controleur* controller;
-    Rules rules;
-    // c'est fort : le model contient le board et les rules.
-    // c'est surement là que va se jouer l'initialisation du niveau
-    
+    friend class View;
 
+    public:
 
-    Board load_level_from_file(const string& path); // fonction utilitaire pour charger un niveau à partir d'un fichier ASCII   
-    // déclarée ici parce que comme c'est une fonction de board, 
-    // elle à accès aux membres privés de board (genre add_element) car friend 
+        Model() = delete;
 
-    void compute_rules();
-    // TO DO est-ce que compute rules doit appelé send new state to controller ? 
-    
+        Model(const std::string& filePath);
 
-public:
-    Model(const string& level_file_path); // on initialise le model avec un fichier de niveau
-    ~Model(); // TO DO  
-    Board board;
+        /**
+         * @brief Essaie de déplacer vers le haut les éléments du board constituant le joueur.
+         */
+        void moveUp();
 
-    vector<string> get_word_triples();
+        /**
+         * @brief Essaie de déplacer vers le bas les éléments du board constituant le joueur.
+         */
+        void moveDown();
 
+        /**
+         * @brief Essaie de déplacer vers la gauche les éléments du board constituant le joueur.
+         */
+        void moveLeft();
 
-    void move(char direction /* TO DO direction ? */); // un push est un move
-    // to do pas public
-    vector<string> render_board() const;
+        /**
+         * @brief Essaie de déplacer vers la droite les éléments du board constituant le joueur.
+         */
+        void moveRight();
 
-    int getGridHeight() const;
-    int getGridWidth() const;
+        /**
+         * @brief Table d'association entre le boardElementType d'un BoardElement appartenant à
+         *        la catégorie BoardElementCategory::OBJECT et le RuleSubject associé :
+         *            BoardElementType::BABA -> RuleSubject::BABA
+         *            BoardElementType::WALL -> RuleSubject::WALL
+         *            BoardElementType::FLAG -> RuleSubject::FLAG
+         *            BoardElementType::ROCK -> RuleSubject::ROCK
+         *
+         * @param boardElementType
+         *        Le BoardElementType d'un BoardElement appartenant à
+         *        la catégorie BoardElementCategory::OBJECT.
+         */
+        static RuleSubject ObjectToRuleSubject(BoardElementType boardElementType);
+
+        /**
+         * @brief Table d'association entre le boardElementType d'un BoardElement appartenant à
+         *        la catégorie BoardElementCategory::TEXT_PROPERTY et le RuleProperty associé :
+         *            BoardElementType::TEXT_BABA -> RuleProperty::BABA
+         *            BoardElementType::TEXT_WALL -> RuleProperty::WALL
+         *            BoardElementType::TEXT_FLAG -> RuleProperty::FLAG
+         *            BoardElementType::TEXT_ROCK -> RuleProperty::ROCK
+         *            BoardElementType::TEXT_PUSH -> RuleProperty::PUSH
+         *            BoardElementType::TEXT_YOU -> RuleProperty::YOU
+         *            BoardElementType::TEXT_STOP -> RuleProperty::STOP
+         *            BoardElementType::TEXT_WIN -> RuleProperty::WIN
+         *
+         * @param boardElementType
+         *        Le BoardElementType d'un BoardElement appartenant à
+         *        la catégorie BoardElementCategory::TEXT_PROPERTY.
+         */
+        static RuleProperty TextPropertyToRuleProperty(BoardElementType boardElementType);
+
+        /**
+         * @brief Table d'association entre le boardElementType d'un BoardElement appartenant à
+         *        la catégorie BoardElementCategory::TEXT_OBJECT et le RuleSubject associé :
+         *            BoardElementType::TEXT_BABA -> RuleSubject::BABA
+         *            BoardElementType::TEXT_WALL -> RuleSubject::WALL
+         *            BoardElementType::TEXT_FLAG -> RuleSubject::FLAG
+         *            BoardElementType::TEXT_ROCK -> RuleSubject::ROCK
+         *
+         * @param boardElementType
+         *        Le BoardElementType d'un BoardElement appartenant à
+         *        la catégorie BoardElementCategory::TEXT_OBJECT.
+         */
+        static RuleSubject TextObjectToRuleSubject(BoardElementType boardElementType);
+
+    private:
+
+        /**
+         * @brief Récupère tous les éléments du board qui ont la propriété ruleProperty.
+         *
+         * @param ruleProperty
+         *        La propriété en question.
+         */
+        std::vector<BoardElement*> getBoardElements(RuleProperty ruleProperty);
+
+        /**
+         * @brief Met à jour la règle codée horizontalement et commençant sur la case (x, y), si elle existe.
+         *
+         * @param x
+         *        Entier compris entre 0 et board.getWidth() inclus.
+         * @param y
+         *        Entier compris entre 0 et board.getHeight() inclus.
+         */
+        void updateHorizontalRuleFromCell(int x, int y);
+
+        void updateVerticalRuleFromCell(int x, int y);
+
+        /**
+         * @brief Renvoie vrai si la case (x, y) est libre, sinon faux.
+         *        Une case est libre si :
+         *            - tous les éléments se trouvant sur cette case ne possèdent pas la propriété STOP ;
+         *            - tous les éléments se trouvant sur cette case ne possèdent pas la propriété PUSH.
+         *
+         * @param x
+         *        Entier compris entre 0 et board.getWidth() inclus.
+         * @param y
+         *        Entier compris entre 0 et board.getHeight() inclus.
+         */
+        bool isCellFree(int x, int y);
+
+        /**
+         * @brief Essaie de pousser vers le haut les éléments de la case (x, y).
+         *
+         * @param x
+         *        Entier compris entre 0 et board.getWidth() inclus.
+         * @param y
+         *        Entier compris entre 0 et board.getHeight() inclus.
+         * @param visitedBoardElementsYou
+         *        On y ajoutera les éléments constituant le joueur qui ont dû
+         *        se déplacer vers le haut pour pouvoir pousser vers le haut les
+         *        éléments de la case (x, y).
+         */
+        void tryPushUp(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou);
+
+        void tryPushDown(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou);
+
+        void tryPushLeft(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou);
+
+        void tryPushRight(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou);
+
+        /**
+         * @brief Essaie de déplacer vers le haut les éléments de la case (x, y) constituant le joueur.
+         *
+         * @param x
+         *        Entier compris entre 0 et board.getWidth() inclus.
+         * @param y
+         *        Entier compris entre 0 et board.getHeight() inclus.
+         * @param visitedBoardElementsYou
+         *        On y ajoutera les éléments constituant le joueur qui ont dû
+         *        se déplacer vers le haut pour pouvoir déplacer vers le haut les
+         *        éléments de la case (x, y) constituant le joueur.
+         */
+        void tryMoveUp(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou);
+
+        void tryMoveDown(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou);
+
+        void tryMoveLeft(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou);
+
+        void tryMoveRight(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou);
+
+        Board board;
+
+        Rules rules;
+
+        void updateRules();
 };
 
-#endif // LOGIC_MODEL_HPP
-
-/* 
-le modèle doit : 
-A) au début de la partie
-- construire le board (via un loader de niveau) 
-    c'est à dire sa dimension et ses éléments.
-- initilaiser les règles d'après ce board
-
-A : DONE DONE 
-
-
-B) pendant la partie
-- récupérer l'input via le contrôleur
-- faire bouger les objets controlables (si possible)
-- si push, faire bouger les objets pushables
-- si un objet meaningful_type à été bougé :
-    - recalculer les règles
-        - mettre à jour les règles dans Rules
-    - vérifier les conditions de victoire/défaite
-- renvoyer l'état du board et des règles au controleur pour affichage 
-*/
+#endif
