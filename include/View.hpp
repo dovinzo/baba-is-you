@@ -43,8 +43,11 @@ class View
          *
          * @param window
          *        Fenêtre du jeu.
+         * @param model
+         *        Modèle du jeu permettant de parcourir
+         *        les sprites dans le bon ordre pour la superposition.
          */
-        void draw(sf::RenderWindow& window);
+        void draw(sf::RenderWindow& window, Model& model);
 
         void createTextures();
 

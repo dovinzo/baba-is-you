@@ -18,7 +18,7 @@ int main()
         controller.handleEvent(model, event, window);
         view.update(model);
         window.clear();
-        view.draw(window);
+        view.draw(window, model);
         window.display();
     }
 

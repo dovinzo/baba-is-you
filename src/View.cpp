@@ -49,14 +49,25 @@ void View::update(Model& model)
     }
 }
 
-void View::draw(sf::RenderWindow& window)
+// ENCOURS
+void View::draw(sf::RenderWindow& window, Model& model)
 {
-    std::unordered_map<BoardElement*, sf::Sprite*>::iterator it_sprites = sprites.begin();
-    while (it_sprites != sprites.end())
+    for (int x = 0 ; x < model.board.getWidth() ; x++)
     {
-        window.draw(*(it_sprites->second));
-        it_sprites++;
+        for (int y = 0 ; y < model.board.getHeight() ; y++)
+        {
+            for (int i = 0 ; i < static_cast<int>(model.board.grid[x][y].size()) ; i++)
+            {
+                window.draw(*sprites[model.board.grid[x][y][i]]);
+            }
+        }
     }
+    //std::unordered_map<BoardElement*, sf::Sprite*>::iterator it_sprites = sprites.begin();
+    //while (it_sprites != sprites.end())
+    //{
+        //window.draw(*(it_sprites->second));
+        //it_sprites++;
+    //}
 }
 
 void View::createTextures()
