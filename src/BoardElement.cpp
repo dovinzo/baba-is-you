@@ -106,27 +106,3 @@ void BoardElement::setPositionY(int y)
 {
     this->y = y;
 }
-
-// ENCOURS
-bool BoardElement::hasProperty(RuleProperty ruleProperty, Rules& rules) const
-{
-    bool result;
-    RuleSubject ruleSubject;
-    if (this->getCategory() == BoardElementCategory::TEXT_OBJECT or this->getCategory() == BoardElementCategory::TEXT_IS or this->getCategory() == BoardElementCategory::TEXT_PROPERTY)
-    {
-        if (ruleProperty == RuleProperty::PUSH)
-        {
-            result = true;
-        }
-        else
-        {
-            result = false;
-        }
-    }
-    else
-    {
-        ruleSubject = Model::ObjectToRuleSubject(type);
-        result = rules.haveRule(ruleSubject, ruleProperty);
-    }
-    return result;
-}

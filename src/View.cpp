@@ -49,7 +49,6 @@ void View::update(Model& model)
     }
 }
 
-// ENCOURS
 void View::draw(sf::RenderWindow& window, Model& model)
 {
     for (int x = 0 ; x < model.board.getWidth() ; x++)
@@ -62,12 +61,6 @@ void View::draw(sf::RenderWindow& window, Model& model)
             }
         }
     }
-    //std::unordered_map<BoardElement*, sf::Sprite*>::iterator it_sprites = sprites.begin();
-    //while (it_sprites != sprites.end())
-    //{
-        //window.draw(*(it_sprites->second));
-        //it_sprites++;
-    //}
 }
 
 void View::createTextures()
@@ -99,6 +92,18 @@ void View::createTextures()
     // text push
     textures[BoardElementType::TEXT_PUSH] = new sf::Texture{};
     textures[BoardElementType::TEXT_PUSH]->loadFromFile("assets/text_push.png");
+    // text flag
+    textures[BoardElementType::TEXT_FLAG] = new sf::Texture{};
+    textures[BoardElementType::TEXT_FLAG]->loadFromFile("assets/text_flag.png");
+    // text win
+    textures[BoardElementType::TEXT_WIN] = new sf::Texture{};
+    textures[BoardElementType::TEXT_WIN]->loadFromFile("assets/text_win.png");
+    // text rock
+    textures[BoardElementType::TEXT_ROCK] = new sf::Texture{};
+    textures[BoardElementType::TEXT_ROCK]->loadFromFile("assets/text_rock.png");
+    // text stop
+    textures[BoardElementType::TEXT_STOP] = new sf::Texture{};
+    textures[BoardElementType::TEXT_STOP]->loadFromFile("assets/text_stop.png");
 }
 
 void View::createSprites(Model& model, sf::RenderWindow& window)

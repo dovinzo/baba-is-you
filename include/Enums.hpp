@@ -54,4 +54,18 @@ enum class RuleProperty
     WIN
 };
 
+enum class AppState
+{
+    MENU,
+    LEVEL,
+    QUIT
+};
+
+enum class MenuItem
+{
+    LEVEL1,
+    LEVEL2,
+    LEVEL3
+};
+
 #endif

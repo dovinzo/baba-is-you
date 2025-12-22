@@ -16,7 +16,7 @@ class Model
 
         Model() = delete;
 
-        Model(const std::string& filePath);
+        Model(int level);
 
         /**
          * @brief Essaie de déplacer vers le haut les éléments du board constituant le joueur.
@@ -37,6 +37,10 @@ class Model
          * @brief Essaie de déplacer vers la droite les éléments du board constituant le joueur.
          */
         void moveRight();
+
+        bool checkWin() const;
+
+    private:
 
         /**
          * @brief Table d'association entre le boardElementType d'un BoardElement appartenant à
@@ -84,7 +88,7 @@ class Model
          */
         static RuleSubject TextObjectToRuleSubject(BoardElementType boardElementType);
 
-    private:
+        bool boardElementHasProperty(BoardElement& boardElement, RuleProperty ruleProperty) const;
 
         /**
          * @brief Récupère tous les éléments du board qui ont la propriété ruleProperty.

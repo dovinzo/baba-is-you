@@ -6,8 +6,24 @@
 #include <sstream> // pour std::istringstream
 #include <iostream>
 
-Board::Board(): width{0}, height{0}, grid{nullptr}
+Board::Board(int level): width{}, height{}, grid{}
 {
+    std::string filePath = "assets/level" + std::to_string(level) + ".txt";
+    std::string line;
+    int x, y, typeCode, width, height;
+    BoardElementType boardElementType;
+    std::ifstream file{filePath}; // ouvre le fichier en lecture
+    std::getline(file, line);
+    std::istringstream iss{line};
+    iss >> width >> height;
+    this->createEmptyGrid(width, height);
+    while (std::getline(file, line))
+    {
+        std::istringstream iss{line};
+        iss >> x >> y >> typeCode;
+        boardElementType = BoardElement::intToBoardElementType(typeCode);
+        this->spawnBoardElement(boardElementType, x, y);
+    }
 }
 
 Board::~Board()
@@ -46,25 +62,6 @@ int Board::getWidth() const
 int Board::getHeight() const
 {
     return height;
-}
-
-void Board::loadLevel(const std::string& filePath)
-{
-    std::string line;
-    int x, y, typeCode, width, height;
-    BoardElementType boardElementType;
-    std::ifstream file{filePath}; // ouvre le fichier en lecture
-    std::getline(file, line);
-    std::istringstream iss{line};
-    iss >> width >> height;
-    this->createEmptyGrid(width, height);
-    while (std::getline(file, line))
-    {
-        std::istringstream iss{line};
-        iss >> x >> y >> typeCode;
-        boardElementType = BoardElement::intToBoardElementType(typeCode);
-        this->spawnBoardElement(boardElementType, x, y);
-    }
 }
 
 void Board::setNewPosition(BoardElement* boardElement, int xNew, int yNew)

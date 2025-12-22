@@ -1,13 +1,18 @@
 #ifndef CONTROLLER_HPP
 #define CONTROLLER_HPP
 
-#include <SFML/Graphics.hpp>
 #include "Model.hpp"
+#include "App.hpp"
 
 class Controller
 {
     public:
-        void handleEvent(Model& model, sf::Event& event, sf::RenderWindow& window);
+        Controller() = delete;
+        Controller(App& app, Model& model);
+        void handleEvent();
+    private:
+        App& app;
+        Model& model;
 };
 
 #endif

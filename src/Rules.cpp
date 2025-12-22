@@ -27,12 +27,12 @@ Rules::Rules(): rules{}
     }
 }
 
-bool Rules::haveRule(RuleSubject ruleSubject, RuleProperty ruleProperty)
+bool Rules::haveRule(RuleSubject ruleSubject, RuleProperty ruleProperty) const
 {
     RuleKey ruleKey{};
     ruleKey.subject = ruleSubject;
     ruleKey.property = ruleProperty;
-    return rules[ruleKey];
+    return rules.at(ruleKey);
 }
 
 std::vector<RuleSubject> Rules::getRuleSubjects()
@@ -75,7 +75,6 @@ std::vector<RuleSubject> Rules::getRuleSubjects(RuleProperty ruleProperty)
     return ruleSubjects;
 }
 
-// ENCOURS
 void Rules::setRule(RuleSubject ruleSubject, RuleProperty ruleProperty)
 {
     RuleKey ruleKey;
@@ -84,7 +83,6 @@ void Rules::setRule(RuleSubject ruleSubject, RuleProperty ruleProperty)
     rules[ruleKey] = true;
 }
 
-// TEMP
 void Rules::clearRules()
 {
     std::vector<RuleSubject> ruleSubjects = Rules::getRuleSubjects();

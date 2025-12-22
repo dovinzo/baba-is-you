@@ -18,7 +18,7 @@ class Rules
 {
     public:
         Rules();
-        bool haveRule(RuleSubject ruleSubject, RuleProperty ruleProperty);
+        bool haveRule(RuleSubject ruleSubject, RuleProperty ruleProperty) const;
         std::vector<RuleSubject> getRuleSubjects(RuleProperty ruleProperty);
         void setRule(RuleSubject ruleSubject, RuleProperty ruleProperty);
         void clearRules();
