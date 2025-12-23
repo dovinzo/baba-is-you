@@ -81,17 +81,19 @@ void Model::moveRight()
 bool Model::checkWin() const
 {
     bool hasYou{false}, hasWin{false};
+    std::vector<BoardElement*> cell;
     for (int x = 0 ; x < board.getWidth() ; x++)
     {
         for (int y = 0 ; y < board.getHeight() ; y++)
         {
             hasYou = false;
             hasWin = false;
-            for (int i = 0 ; i < static_cast<int>(board.grid[x][y].size()) ; i++)
+            cell = board.getCell(x, y);
+            for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
             {
-                if (this->boardElementHasProperty(*(board.grid[x][y][i]), RuleProperty::YOU))
+                if (this->boardElementHasProperty(*(cell[i]), RuleProperty::YOU))
                     hasYou = true;
-                if (this->boardElementHasProperty(*(board.grid[x][y][i]), RuleProperty::WIN))
+                if (this->boardElementHasProperty(*(cell[i]), RuleProperty::WIN))
                     hasWin = true;
             }
             if (hasYou and hasWin)
@@ -101,18 +103,35 @@ bool Model::checkWin() const
     return false;
 }
 
+int Model::getBoardWidth() const
+{
+   return board.getWidth();
+}
+
+int Model::getBoardHeight() const
+{
+    return board.getHeight();
+}
+
+std::vector<BoardElement*> Model::getBoardCell(int x, int y) const
+{
+    return board.getCell(x, y);
+}
+
 std::vector<BoardElement*> Model::getBoardElements(RuleProperty ruleProperty)
 {
     std::vector<BoardElement*> boardElements;
+    std::vector<BoardElement*> cell;
     for (int x = 0 ; x < board.getWidth() ; x++)
     {
         for (int y = 0 ; y < board.getHeight() ; y++)
         {
-            for (int i = 0 ; i < static_cast<int>(board.grid[x][y].size()) ; i++)
+            cell = board.getCell(x, y);
+            for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
             {
-                if (this->boardElementHasProperty(*(board.grid[x][y][i]), ruleProperty))
+                if (this->boardElementHasProperty(*(cell[i]), ruleProperty))
                 {
-                    boardElements.push_back(board.grid[x][y][i]);
+                    boardElements.push_back(cell[i]);
                 }
             }
         }
@@ -220,7 +239,6 @@ RuleSubject Model::TextObjectToRuleSubject(BoardElementType boardElementType)
     return ruleSubject;
 }
 
-// ENCOURS
 bool Model::boardElementHasProperty(BoardElement& boardElement, RuleProperty ruleProperty) const
 {
     RuleSubject ruleSubject;
@@ -242,20 +260,23 @@ void Model::updateHorizontalRuleFromCell(int x, int y)
 {
     RuleSubject ruleSubject;
     RuleProperty ruleProperty;
-    for (int i = 0 ; i < static_cast<int>(board.grid[x][y].size()) ; i++)
+    std::vector<BoardElement*> cellxy = board.getCell(x, y);
+    std::vector<BoardElement*> cellxplus1y = board.getCell(x+1, y);
+    std::vector<BoardElement*> cellxplus2y = board.getCell(x+2, y);
+    for (int i = 0 ; i < static_cast<int>(cellxy.size()) ; i++)
     {
-        if (board.grid[x][y][i]->getCategory() == BoardElementCategory::TEXT_OBJECT)
+        if (cellxy[i]->getCategory() == BoardElementCategory::TEXT_OBJECT)
         {
-            for (int j = 0 ; j < static_cast<int>(board.grid[x+1][y].size()) ; j++)
+            for (int j = 0 ; j < static_cast<int>(cellxplus1y.size()) ; j++)
             {
-                if (board.grid[x+1][y][j]->getCategory() == BoardElementCategory::TEXT_IS)
+                if (cellxplus1y[j]->getCategory() == BoardElementCategory::TEXT_IS)
                 {
-                    for (int k = 0 ; k < static_cast<int>(board.grid[x+2][y].size()) ; k++)
+                    for (int k = 0 ; k < static_cast<int>(cellxplus2y.size()) ; k++)
                     {
-                        if (board.grid[x+2][y][k]->getCategory() == BoardElementCategory::TEXT_PROPERTY)
+                        if (cellxplus2y[k]->getCategory() == BoardElementCategory::TEXT_PROPERTY)
                         {
-                            ruleSubject = Model::TextObjectToRuleSubject(board.grid[x][y][i]->getType());
-                            ruleProperty = Model::TextPropertyToRuleProperty(board.grid[x+2][y][k]->getType());
+                            ruleSubject = Model::TextObjectToRuleSubject(cellxy[i]->getType());
+                            ruleProperty = Model::TextPropertyToRuleProperty(cellxplus2y[k]->getType());
                             rules.setRule(ruleSubject, ruleProperty);
                         }
                     }
@@ -269,20 +290,23 @@ void Model::updateVerticalRuleFromCell(int x, int y)
 {
     RuleSubject ruleSubject;
     RuleProperty ruleProperty;
-    for (int i = 0 ; i < static_cast<int>(board.grid[x][y].size()) ; i++)
+    std::vector<BoardElement*> cellxy = board.getCell(x, y);
+    std::vector<BoardElement*> cellxyplus1 = board.getCell(x, y+1);
+    std::vector<BoardElement*> cellxyplus2 = board.getCell(x, y+2);
+    for (int i = 0 ; i < static_cast<int>(cellxy.size()) ; i++)
     {
-        if (board.grid[x][y][i]->getCategory() == BoardElementCategory::TEXT_OBJECT)
+        if (cellxy[i]->getCategory() == BoardElementCategory::TEXT_OBJECT)
         {
-            for (int j = 0 ; j < static_cast<int>(board.grid[x][y+1].size()) ; j++)
+            for (int j = 0 ; j < static_cast<int>(cellxyplus1.size()) ; j++)
             {
-                if (board.grid[x][y+1][j]->getCategory() == BoardElementCategory::TEXT_IS)
+                if (cellxyplus1[j]->getCategory() == BoardElementCategory::TEXT_IS)
                 {
-                    for (int k = 0 ; k < static_cast<int>(board.grid[x][y+2].size()) ; k++)
+                    for (int k = 0 ; k < static_cast<int>(cellxyplus2.size()) ; k++)
                     {
-                        if (board.grid[x][y+2][k]->getCategory() == BoardElementCategory::TEXT_PROPERTY)
+                        if (cellxyplus2[k]->getCategory() == BoardElementCategory::TEXT_PROPERTY)
                         {
-                            ruleSubject = Model::TextObjectToRuleSubject(board.grid[x][y][i]->getType());
-                            ruleProperty = Model::TextPropertyToRuleProperty(board.grid[x][y+2][k]->getType());
+                            ruleSubject = Model::TextObjectToRuleSubject(cellxy[i]->getType());
+                            ruleProperty = Model::TextPropertyToRuleProperty(cellxyplus2[k]->getType());
                             rules.setRule(ruleSubject, ruleProperty);
                         }
                     }
@@ -294,11 +318,12 @@ void Model::updateVerticalRuleFromCell(int x, int y)
 
 bool Model::isCellFree(int x, int y)
 {
-    for (int i = 0 ; i < static_cast<int>(board.grid[x][y].size()) ; i++)
+    std::vector<BoardElement*> cell = board.getCell(x, y);
+    for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
     {
-        if (this->boardElementHasProperty(*(board.grid[x][y][i]), RuleProperty::STOP))
+        if (this->boardElementHasProperty(*(cell[i]), RuleProperty::STOP))
             return false;
-        if (this->boardElementHasProperty(*(board.grid[x][y][i]), RuleProperty::PUSH))
+        if (this->boardElementHasProperty(*(cell[i]), RuleProperty::PUSH))
             return false;
     }
     return true;

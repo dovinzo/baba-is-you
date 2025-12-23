@@ -2,7 +2,6 @@
 #define MENUMODEL_HPP
 
 #include "Enums.hpp"
-#include "App.hpp"
 
 class MenuModel
 {

@@ -10,8 +10,6 @@
 
 class Model
 {
-    friend class View;
-
     public:
 
         Model() = delete;
@@ -39,6 +37,12 @@ class Model
         void moveRight();
 
         bool checkWin() const;
+
+        int getBoardWidth() const;
+
+        int getBoardHeight() const;
+
+        std::vector<BoardElement*> getBoardCell(int x, int y) const;
 
     private:
 

@@ -8,8 +8,6 @@
 
 class Board
 {
-    friend class View;
-    friend class Model;
     public:
         Board() = delete;
         Board(int level);

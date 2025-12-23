@@ -1,50 +1,70 @@
+#include <SFML/Graphics.hpp>
+#include "MenuModel.hpp"
+#include "MenuView.hpp"
 #include "MenuController.hpp"
 #include "Enums.hpp"
-#include <SFML/Graphics.hpp>
 
-MenuController::MenuController(App& app, MenuModel& model, MenuView& view): app{app}, model{model}, view{view}
+MenuController::MenuController(sf::RenderWindow& window, MenuModel& menuModel, MenuView& menuView): window{window}, menuModel{menuModel}, menuView{menuView}, levelRequested{false}, whichLevelRequested{}, quitRequested{false}
 {
 }
 
 void MenuController::handleEvent()
 {
     sf::Event event;
-    while (app.window.pollEvent(event))
+    while (window.pollEvent(event))
     {
         if (event.type == sf::Event::Closed)
-            app.appState = AppState::QUIT;
+            quitRequested = true;
         else if (event.type == sf::Event::KeyPressed)
         {
             if (event.key.code == sf::Keyboard::Up)
             {
-                model.previous();
-                view.update();
+                menuModel.previous();
+                menuView.update();
             }
             else if (event.key.code == sf::Keyboard::Down)
             {
-                model.next();
-                view.update();
+                menuModel.next();
+                menuView.update();
             }
             else if (event.key.code == sf::Keyboard::Enter)
-                this->selectLevel();
+            {
+                levelRequested = true;
+                whichLevelRequested = MenuController::whichLevel(menuModel.getMenuItem());
+            }
         }
     }
 }
 
-void MenuController::selectLevel()
+bool MenuController::getLevelRequested() const
 {
-    app.appState = AppState::LEVEL;
-    MenuItem item = model.getMenuItem();
-    switch (item)
+    return levelRequested;
+}
+
+int MenuController::getWhichLevelRequested() const
+{
+    return whichLevelRequested;
+}
+
+bool MenuController::getQuitRequested() const
+{
+    return quitRequested;
+}
+
+int MenuController::whichLevel(MenuItem menuItem)
+{
+    int whichLevelRequested;
+    switch (menuItem)
     {
         case MenuItem::LEVEL1:
-            app.chosenLevel = 1;
+            whichLevelRequested = 1;
             break;
         case MenuItem::LEVEL2:
-            app.chosenLevel = 2;
+            whichLevelRequested = 2;
             break;
         case MenuItem::LEVEL3:
-            app.chosenLevel = 3;
+            whichLevelRequested = 3;
             break;
     }
+    return whichLevelRequested;
 }

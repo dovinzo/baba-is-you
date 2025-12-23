@@ -1,22 +1,33 @@
 #ifndef APP_HPP
 #define APP_HPP
 
-#include "Enums.hpp"
+#include "MenuModel.hpp"
+#include "MenuView.hpp"
+#include "MenuController.hpp"
+#include "Model.hpp"
+#include "View.hpp"
+#include "Controller.hpp"
 #include <SFML/Graphics.hpp>
 
 class App
 {
-    friend class Controller;
-    friend class MenuController;
     public:
         App();
         void run();
     private:
+        void initState();
+        void changeState(AppState nextAppState);
         void processMenu();
         void processLevel();
-        sf::RenderWindow window;
+    private:
+        sf::RenderWindow* window;
         AppState appState;
-        int chosenLevel;
+        MenuModel* menuModel;
+        MenuView* menuView;
+        MenuController* menuController;
+        Model* levelModel;
+        View* levelView;
+        Controller* levelController;
 };
 
 #endif

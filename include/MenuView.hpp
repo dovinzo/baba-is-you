@@ -8,7 +8,7 @@ class MenuView
 {
     public:
         MenuView() = delete;
-        MenuView(sf::RenderWindow& window, MenuModel& model);
+        MenuView(sf::RenderWindow& window, MenuModel& menuModel);
         void draw();
         void update();
     private:
@@ -18,7 +18,7 @@ class MenuView
         sf::Text level2;
         sf::Text level3;
         sf::RenderWindow& window;
-        MenuModel& model;
+        MenuModel& menuModel;
 };
 
 #endif

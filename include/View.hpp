@@ -36,7 +36,7 @@ class View
          * @param model
          *        Modèle du jeu en cours.
          */
-        void update(Model& model);
+        void update();
 
         /**
          * @brief Dessine à l'écran (i.e. sur la fenêtre du jeu) la vue.
@@ -47,19 +47,21 @@ class View
          *        Modèle du jeu permettant de parcourir
          *        les sprites dans le bon ordre pour la superposition.
          */
-        void draw(sf::RenderWindow& window, Model& model);
+        void draw();
+
+    private:
 
         void createTextures();
 
-        void createSprites(Model& model, sf::RenderWindow& window);
+        void createSprites();
 
-        void createSprite(BoardElement* boardElement, Model& model);
+        void createSprite(BoardElement* boardElement);
 
-        static float calculateSpritesScale(Model& model);
+        float calculateSpritesScale();
 
-        static int convertXGridToXScreen(Model& model, int xGrid);
+        int convertXGridToXScreen(int xGrid);
 
-        static int convertYGridToYScreen(Model& model, int yGrid);
+        int convertYGridToYScreen(int yGrid);
 
     private:
 
@@ -74,6 +76,10 @@ class View
          *        correspondant permettant d'afficher l'élément du board à l'écran.
          */
         std::unordered_map<BoardElement*, sf::Sprite*> sprites;
+
+        Model& model;
+
+        sf::RenderWindow& window;
 };
 
 #endif

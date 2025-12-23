@@ -1,7 +1,7 @@
 #ifndef MENUCONTROLLER_HPP
 #define MENUCONTROLLER_HPP
 
-#include "App.hpp"
+#include <SFML/Graphics.hpp>
 #include "MenuModel.hpp"
 #include "MenuView.hpp"
 
@@ -9,13 +9,20 @@ class MenuController
 {
     public:
         MenuController() = delete;
-        MenuController(App& app, MenuModel& model, MenuView& view);
+        MenuController(sf::RenderWindow& window, MenuModel& menuModel, MenuView& menuView);
         void handleEvent();
-        void selectLevel();
+        bool getLevelRequested() const;
+        int getWhichLevelRequested() const;
+        bool getQuitRequested() const;
     private:
-        App& app;
-        MenuModel& model;
-        MenuView& view;
+        static int whichLevel(MenuItem menuItem);
+    private:
+        sf::RenderWindow& window;
+        MenuModel& menuModel;
+        MenuView& menuView;
+        bool levelRequested;
+        int whichLevelRequested;
+        bool quitRequested;
 };
 
 #endif

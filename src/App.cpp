@@ -8,14 +8,15 @@
 #include "MenuController.hpp"
 #include <SFML/Graphics.hpp>
 
-App::App(): window{sf::VideoMode(800, 800), "Baba Is You", sf::Style::Close}, appState{AppState::MENU}, chosenLevel{1}
+App::App(): window{nullptr}, appState{}, menuModel{nullptr}, menuView{nullptr}, menuController{nullptr}, levelModel{nullptr}, levelView{nullptr}, levelController{nullptr}
 {
-    window.setFramerateLimit(60);
 }
 
 void App::run()
 {
-    while (window.isOpen())
+    this->initState();
+
+    while (appState != AppState::QUIT)
     {
         switch (appState)
         {
@@ -26,37 +27,86 @@ void App::run()
                 this->processLevel();
                 break;
             case AppState::QUIT:
-                window.close();
                 break;
         }
     }
 }
 
+void App::initState()
+{
+    window = new sf::RenderWindow{sf::VideoMode(800, 800), "Baba Is You", sf::Style::Close};
+    window->setFramerateLimit(60);
+    menuModel = new MenuModel;
+    menuView = new MenuView{*window, *menuModel};
+    menuController = new MenuController{*window, *menuModel, *menuView};
+    appState = AppState::MENU;
+}
+
+void App::changeState(AppState nextAppState)
+{
+    if (appState == AppState::MENU)
+    {
+        if (nextAppState == AppState::LEVEL)
+        {
+            levelModel = new Model{menuController->getWhichLevelRequested()};
+            levelView = new View{*levelModel, *window};
+            levelController = new Controller{*window, *levelModel, *levelView};
+        }
+        else if (nextAppState == AppState::QUIT)
+        {
+            window->close();
+            delete window;
+        }
+        delete menuModel;
+        delete menuView;
+        delete menuController;
+    }
+    else if (appState == AppState::LEVEL)
+    {
+        if (nextAppState == AppState::MENU)
+        {
+            menuModel = new MenuModel;
+            menuView = new MenuView{*window, *menuModel};
+            menuController = new MenuController{*window, *menuModel, *menuView};
+        }
+        else if (nextAppState == AppState::QUIT)
+        {
+            window->close();
+            delete window;
+        }
+        delete levelModel;
+        delete levelView;
+        delete levelController;
+    }
+    appState = nextAppState;
+}
+
 void App::processMenu()
 {
-    MenuModel model;
-    MenuView view{window, model};
-    MenuController controller{*this, model, view};
     while (appState == AppState::MENU)
     {
-        controller.handleEvent();
-        window.clear();
-        view.draw();
-        window.display();
+        menuController->handleEvent();
+        window->clear();
+        menuView->draw();
+        window->display();
+        if (menuController->getLevelRequested())
+            this->changeState(AppState::LEVEL);
+        else if (menuController->getQuitRequested())
+            this->changeState(AppState::QUIT);
     }
 }
 
 void App::processLevel()
 {
-    Model model{chosenLevel};
-    View view{model, window};
-    Controller controller{*this, model};
     while (appState == AppState::LEVEL)
     {
-        controller.handleEvent();
-        view.update(model);
-        window.clear();
-        view.draw(window, model);
-        window.display();
+        levelController->handleEvent();
+        window->clear();
+        levelView->draw();
+        window->display();
+        if (levelController->getMenuRequested())
+            this->changeState(AppState::MENU);
+        else if (levelController->getQuitRequested())
+            this->changeState(AppState::QUIT);
     }
 }

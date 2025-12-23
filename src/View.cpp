@@ -4,10 +4,10 @@
 #include "Enums.hpp"
 #include <unordered_map>
 
-View::View(Model& model, sf::RenderWindow& window) : textures{}, sprites{}
+View::View(Model& model, sf::RenderWindow& window) : textures{}, sprites{}, model{model}, window{window}
 {
     this->createTextures();
-    this->createSprites(model, window);
+    this->createSprites();
 }
 
 View::~View()
@@ -27,10 +27,11 @@ View::~View()
     }
 }
 
-void View::update(Model& model)
+void View::update()
 {
-    int width{model.board.getWidth()};
-    int height{model.board.getHeight()};
+    int width{model.getBoardWidth()};
+    int height{model.getBoardHeight()};
+    std::vector<BoardElement*> cell;
     float s{};
     int xScreen{};
     int yScreen{};
@@ -41,23 +42,26 @@ void View::update(Model& model)
         for (int y = 0 ; y < height ; y++)
         {
             yScreen = (int)(24.f * s * (float)(y));
-            for (int i = 0 ; i < static_cast<int>(model.board.grid[x][y].size()) ; i++)
+            cell = model.getBoardCell(x, y);
+            for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
             {
-                sprites[model.board.grid[x][y][i]]->setPosition(xScreen, yScreen);
+                sprites[cell[i]]->setPosition(xScreen, yScreen);
             }
         }
     }
 }
 
-void View::draw(sf::RenderWindow& window, Model& model)
+void View::draw()
 {
-    for (int x = 0 ; x < model.board.getWidth() ; x++)
+    std::vector<BoardElement*> cell;
+    for (int x = 0 ; x < model.getBoardWidth() ; x++)
     {
-        for (int y = 0 ; y < model.board.getHeight() ; y++)
+        for (int y = 0 ; y < model.getBoardHeight() ; y++)
         {
-            for (int i = 0 ; i < static_cast<int>(model.board.grid[x][y].size()) ; i++)
+            cell = model.getBoardCell(x, y);
+            for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
             {
-                window.draw(*sprites[model.board.grid[x][y][i]]);
+                window.draw(*sprites[cell[i]]);
             }
         }
     }
@@ -106,26 +110,27 @@ void View::createTextures()
     textures[BoardElementType::TEXT_STOP]->loadFromFile("assets/text_stop.png");
 }
 
-void View::createSprites(Model& model, sf::RenderWindow& window)
+void View::createSprites()
 {
-    int width{model.board.getWidth()}, height{model.board.getHeight()};
-    for (int x = 0 ; x < width ; x++)
+    std::vector<BoardElement*> cell;
+    for (int x = 0 ; x < model.getBoardWidth() ; x++)
     {
-        for (int y = 0 ; y < height ; y++)
+        for (int y = 0 ; y < model.getBoardHeight() ; y++)
         {
-            for (int i = 0 ; i < static_cast<int>(model.board.grid[x][y].size()) ; i++)
+            cell = model.getBoardCell(x, y);
+            for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
             {
-                this->createSprite(model.board.grid[x][y][i], model);
+                this->createSprite(cell[i]);
             }
         }
     }
 }
 
-void View::createSprite(BoardElement* boardElement, Model& model)
+void View::createSprite(BoardElement* boardElement)
 {
     int xGrid{boardElement->getPositionX()}, yGrid{boardElement->getPositionY()};
-    int xScreen{View::convertXGridToXScreen(model, xGrid)}, yScreen{View::convertYGridToYScreen(model, yGrid)};
-    float s{View::calculateSpritesScale(model)};
+    int xScreen{View::convertXGridToXScreen(xGrid)}, yScreen{View::convertYGridToYScreen(yGrid)};
+    float s{View::calculateSpritesScale()};
     sprites[boardElement] = new sf::Sprite{};
     switch (boardElement->getType())
     {
@@ -174,22 +179,22 @@ void View::createSprite(BoardElement* boardElement, Model& model)
     sprites[boardElement]->setTextureRect(sf::IntRect(1, 1, 24, 24));
 }
 
-float View::calculateSpritesScale(Model& model)
+float View::calculateSpritesScale()
 {
-    int width{model.board.getWidth()}, height{model.board.getHeight()};
+    int width{model.getBoardWidth()}, height{model.getBoardHeight()};
     float s;
     s = (height < width) ? (800.f / (24.f * (float)width)) : (800.f / (24.f * (float)height));
     return s;
 }
 
-int View::convertXGridToXScreen(Model& model, int xGrid)
+int View::convertXGridToXScreen(int xGrid)
 {
-    float s = View::calculateSpritesScale(model);
+    float s = this->calculateSpritesScale();
     return (int)(24.f * s * (float)(xGrid));
 }
 
-int View::convertYGridToYScreen(Model& model, int yGrid)
+int View::convertYGridToYScreen(int yGrid)
 {
-    float s = View::calculateSpritesScale(model);
+    float s = this->calculateSpritesScale();
     return (int)(24.f * s * (float)(yGrid));
 }

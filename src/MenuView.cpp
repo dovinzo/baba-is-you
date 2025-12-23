@@ -1,6 +1,6 @@
 #include "MenuView.hpp"
 
-MenuView::MenuView(sf::RenderWindow& window, MenuModel& model): font{}, level1{}, level2{}, level3{}, window{window}, model{model}
+MenuView::MenuView(sf::RenderWindow& window, MenuModel& menuModel): font{}, level1{}, level2{}, level3{}, window{window}, menuModel{menuModel}
 {
     font.loadFromFile("assets/Serif.ttf");
 
@@ -29,7 +29,7 @@ void MenuView::draw()
 void MenuView::update()
 {
     this->reset();
-    switch (model.getMenuItem())
+    switch (menuModel.getMenuItem())
     {
         case MenuItem::LEVEL1:
             level1.setFillColor(sf::Color::Red);

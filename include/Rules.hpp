@@ -19,11 +19,11 @@ class Rules
     public:
         Rules();
         bool haveRule(RuleSubject ruleSubject, RuleProperty ruleProperty) const;
-        std::vector<RuleSubject> getRuleSubjects(RuleProperty ruleProperty);
         void setRule(RuleSubject ruleSubject, RuleProperty ruleProperty);
         void clearRules();
     private:
         std::map<RuleKey, bool> rules;
+        std::vector<RuleSubject> getRuleSubjects(RuleProperty ruleProperty);
         static std::vector<RuleSubject> getRuleSubjects();
         //static std::vector<RuleSubject> getAllRuleSubjects();
         static std::vector<RuleProperty> getRuleProperties();
