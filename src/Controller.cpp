@@ -19,30 +19,34 @@ void Controller::handleEvent()
             if (event.key.code == sf::Keyboard::Left)
             {
                 model.moveLeft();
-                view.update();
-                if (model.checkWin())
-                    menuRequested = true;
+                //if (model.checkWin())
+                    //menuRequested = true;
             }
             else if (event.key.code == sf::Keyboard::Right)
             {
                 model.moveRight();
-                view.update();
-                if (model.checkWin())
-                    menuRequested = true;
+                //if (model.checkWin())
+                    //menuRequested = true;
             }
             else if (event.key.code == sf::Keyboard::Up)
             {
                 model.moveUp();
-                view.update();
-                if (model.checkWin())
-                    menuRequested = true;
+                //if (model.checkWin())
+                    //menuRequested = true;
             }
             else if (event.key.code == sf::Keyboard::Down)
             {
                 model.moveDown();
-                view.update();
-                if (model.checkWin())
-                    menuRequested = true;
+                //if (model.checkWin())
+                    //menuRequested = true;
+            }
+            else if (event.key.code == sf::Keyboard::P)
+            {
+                model.undo();
+            }
+            else if (event.key.code == sf::Keyboard::N)
+            {
+                model.redo();
             }
         }
     }

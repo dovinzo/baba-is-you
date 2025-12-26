@@ -5,10 +5,12 @@
 #include "Rules.hpp"
 #include "Enums.hpp"
 #include "BoardElement.hpp"
+#include "BoardHistory.hpp"
+#include "Subject.hpp"
 #include <vector>
 #include <set>
 
-class Model
+class Model: public Subject
 {
     public:
 
@@ -35,6 +37,10 @@ class Model
          * @brief Essaie de déplacer vers la droite les éléments du board constituant le joueur.
          */
         void moveRight();
+
+        bool undo();
+
+        bool redo();
 
         bool checkWin() const;
 
@@ -167,11 +173,15 @@ class Model
 
         void tryMoveRight(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou);
 
+        void updateRules();
+
+    private:
+
         Board board;
 
         Rules rules;
 
-        void updateRules();
+        BoardHistory boardHistory;
 };
 
 #endif

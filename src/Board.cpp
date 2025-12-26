@@ -1,6 +1,7 @@
 #include "Board.hpp"
 #include "Enums.hpp"
 #include "BoardElement.hpp"
+#include "BoardSnapshot.hpp"
 #include <fstream> // pour std::ifstream
 #include <string> // pour std::string
 #include <sstream> // pour std::istringstream
@@ -77,6 +78,32 @@ void Board::setNewPosition(BoardElement* boardElement, int xNew, int yNew)
             grid[xOld][yOld].erase(grid[xOld][yOld].begin() + i);
             grid[xNew][yNew].push_back(boardElement);
             break;
+        }
+    }
+}
+
+const BoardSnapshot* Board::makeSnapshot() const
+{
+    return new BoardSnapshot{*this};
+}
+
+void Board::restore(const BoardSnapshot* boardSnapshot)
+{
+    if (boardSnapshot == nullptr)
+        return;
+    for (int x = 0 ; x < width ; x++)
+    {
+        for (int y = 0 ; y < height ; y++)
+        {
+            while (not grid[x][y].empty())
+            {
+                delete grid[x][y].back();
+                grid[x][y].pop_back();
+           }
+           for (int i = 0 ; i < static_cast<int>(boardSnapshot->grid[x][y].size()) ; i++)
+           {
+               grid[x][y].push_back(new BoardElement{boardSnapshot->grid[x][y][i]->getType(), x, y});
+           }
         }
     }
 }

@@ -5,8 +5,8 @@ CPP = g++ --std=c++11 -Wall -Iinclude
 all: prog
 	./prog
 
-prog: obj/main.o obj/BoardElement.o obj/Board.o obj/Rules.o obj/Model.o obj/View.o obj/Controller.o obj/MenuModel.o obj/MenuView.o obj/MenuController.o obj/App.o
-	$(CPP) -o prog obj/main.o obj/BoardElement.o obj/Board.o obj/Rules.o obj/Model.o obj/View.o obj/Controller.o obj/MenuModel.o obj/MenuView.o obj/MenuController.o obj/App.o -lsfml-graphics -lsfml-window -lsfml-system
+prog: obj/main.o obj/BoardElement.o obj/Board.o obj/Rules.o obj/Model.o obj/View.o obj/Controller.o obj/MenuModel.o obj/MenuView.o obj/MenuController.o obj/App.o obj/Subject.o obj/BoardSnapshot.o obj/BoardHistory.o
+	$(CPP) -o prog obj/main.o obj/BoardElement.o obj/Board.o obj/Rules.o obj/Model.o obj/View.o obj/Controller.o obj/MenuModel.o obj/MenuView.o obj/MenuController.o obj/App.o obj/Subject.o obj/BoardSnapshot.o obj/BoardHistory.o -lsfml-graphics -lsfml-window -lsfml-system
 
 obj/main.o: src/main.cpp include/Enums.hpp include/BoardElement.hpp include/Board.hpp include/Rules.hpp include/Model.hpp include/View.hpp include/Controller.hpp
 	$(CPP) -c src/main.cpp -o obj/main.o
@@ -40,6 +40,15 @@ obj/MenuController.o: src/MenuController.cpp include/MenuController.hpp
 
 obj/App.o: src/App.cpp include/App.hpp
 	$(CPP) -c src/App.cpp -o obj/App.o
+
+obj/Subject.o: src/Subject.cpp include/Subject.hpp
+	$(CPP) -c src/Subject.cpp -o obj/Subject.o
+
+obj/BoardSnapshot.o: src/BoardSnapshot.cpp include/BoardSnapshot.hpp
+	$(CPP) -c src/BoardSnapshot.cpp -o obj/BoardSnapshot.o
+
+obj/BoardHistory.o: src/BoardHistory.cpp include/BoardHistory.hpp
+	$(CPP) -c src/BoardHistory.cpp -o obj/BoardHistory.o
 
 clean:
 	rm obj/*.o

@@ -1,13 +1,14 @@
 #include "Model.hpp"
 #include "Enums.hpp"
 #include "BoardElement.hpp"
+#include "Victory.hpp"
 #include <vector>
-#include <iostream>
 #include <algorithm>
 
-Model::Model(int level): board{level}, rules{}
+Model::Model(int level): board{level}, rules{}, boardHistory{}
 {
     this->updateRules();
+    boardHistory.push(board.makeSnapshot());
 }
 
 void Model::moveUp()
@@ -24,7 +25,12 @@ void Model::moveUp()
         this->tryMoveUp(x, y, visitedBoardElementsYou);
     }
     if (not visitedBoardElementsYou.empty())
+    {
         this->updateRules();
+        boardHistory.push(board.makeSnapshot());
+        if (this->checkWin())
+            this->notifyObservers(Victory{});
+    }
 }
 
 void Model::moveDown()
@@ -41,7 +47,12 @@ void Model::moveDown()
         this->tryMoveDown(x, y, visitedBoardElementsYou);
     }
     if (not visitedBoardElementsYou.empty())
+    {
         this->updateRules();
+        boardHistory.push(board.makeSnapshot());
+        if (this->checkWin())
+            this->notifyObservers(Victory{});
+    }
 }
 
 void Model::moveLeft()
@@ -58,7 +69,12 @@ void Model::moveLeft()
         this->tryMoveLeft(x, y, visitedBoardElementsYou);
     }
     if (not visitedBoardElementsYou.empty())
+    {
         this->updateRules();
+        boardHistory.push(board.makeSnapshot());
+        if (this->checkWin())
+            this->notifyObservers(Victory{});
+    }
 }
 
 void Model::moveRight()
@@ -75,7 +91,30 @@ void Model::moveRight()
         this->tryMoveRight(x, y, visitedBoardElementsYou);
     }
     if (not visitedBoardElementsYou.empty())
+    {
         this->updateRules();
+        boardHistory.push(board.makeSnapshot());
+        if (this->checkWin())
+            this->notifyObservers(Victory{});
+    }
+}
+
+bool Model::undo()
+{
+    const BoardSnapshot* boardSnapshot = boardHistory.undo();
+    if (boardSnapshot == nullptr)
+        return false;
+    board.restore(boardSnapshot);
+    return true;
+}
+
+bool Model::redo()
+{
+    const BoardSnapshot* boardSnapshot = boardHistory.redo();
+    if (boardSnapshot == nullptr)
+        return false;
+    board.restore(boardSnapshot);
+    return true;
 }
 
 bool Model::checkWin() const

@@ -4,10 +4,9 @@
 #include "Enums.hpp"
 #include <unordered_map>
 
-View::View(Model& model, sf::RenderWindow& window) : textures{}, sprites{}, model{model}, window{window}
+View::View(Model& model, sf::RenderWindow& window) : textures{}, model{model}, window{window}
 {
     this->createTextures();
-    this->createSprites();
 }
 
 View::~View()
@@ -18,41 +17,11 @@ View::~View()
         delete it_textures->second;
         it_textures = textures.erase(it_textures);
     }
-
-    std::unordered_map<BoardElement*, sf::Sprite*>::iterator it_sprites = sprites.begin();
-    while (it_sprites != sprites.end())
-    {
-        delete it_sprites->second;
-        it_sprites = sprites.erase(it_sprites);
-    }
-}
-
-void View::update()
-{
-    int width{model.getBoardWidth()};
-    int height{model.getBoardHeight()};
-    std::vector<BoardElement*> cell;
-    float s{};
-    int xScreen{};
-    int yScreen{};
-    s = (height < width) ? (800.f / (24.f * (float)width)) : (800.f / (24.f * (float)height));
-    for (int x = 0 ; x < width ; x++)
-    {
-        xScreen = (int)(24.f * s * (float)(x));
-        for (int y = 0 ; y < height ; y++)
-        {
-            yScreen = (int)(24.f * s * (float)(y));
-            cell = model.getBoardCell(x, y);
-            for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
-            {
-                sprites[cell[i]]->setPosition(xScreen, yScreen);
-            }
-        }
-    }
 }
 
 void View::draw()
 {
+    sf::Sprite sprite;
     std::vector<BoardElement*> cell;
     for (int x = 0 ; x < model.getBoardWidth() ; x++)
     {
@@ -61,7 +30,8 @@ void View::draw()
             cell = model.getBoardCell(x, y);
             for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
             {
-                window.draw(*sprites[cell[i]]);
+                this->updateSpriteFromBoardElement(sprite, *cell[i]);
+                window.draw(sprite);
             }
         }
     }
@@ -110,73 +80,57 @@ void View::createTextures()
     textures[BoardElementType::TEXT_STOP]->loadFromFile("assets/text_stop.png");
 }
 
-void View::createSprites()
+void View::updateSpriteFromBoardElement(sf::Sprite& sprite, BoardElement& boardElement)
 {
-    std::vector<BoardElement*> cell;
-    for (int x = 0 ; x < model.getBoardWidth() ; x++)
-    {
-        for (int y = 0 ; y < model.getBoardHeight() ; y++)
-        {
-            cell = model.getBoardCell(x, y);
-            for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
-            {
-                this->createSprite(cell[i]);
-            }
-        }
-    }
-}
-
-void View::createSprite(BoardElement* boardElement)
-{
-    int xGrid{boardElement->getPositionX()}, yGrid{boardElement->getPositionY()};
+    int xGrid{boardElement.getPositionX()}, yGrid{boardElement.getPositionY()};
     int xScreen{View::convertXGridToXScreen(xGrid)}, yScreen{View::convertYGridToYScreen(yGrid)};
     float s{View::calculateSpritesScale()};
-    sprites[boardElement] = new sf::Sprite{};
-    switch (boardElement->getType())
+
+    switch (boardElement.getType())
     {
         case BoardElementType::BABA:
-            sprites[boardElement]->setTexture(*textures[BoardElementType::BABA]);
+            sprite.setTexture(*textures[BoardElementType::BABA]);
             break;
         case BoardElementType::WALL:
-            sprites[boardElement]->setTexture(*textures[BoardElementType::WALL]);
+            sprite.setTexture(*textures[BoardElementType::WALL]);
             break;
         case BoardElementType::FLAG:
-            sprites[boardElement]->setTexture(*textures[BoardElementType::FLAG]);
+            sprite.setTexture(*textures[BoardElementType::FLAG]);
             break;
         case BoardElementType::ROCK:
-            sprites[boardElement]->setTexture(*textures[BoardElementType::ROCK]);
+            sprite.setTexture(*textures[BoardElementType::ROCK]);
             break;
         case BoardElementType::TEXT_BABA:
-            sprites[boardElement]->setTexture(*textures[BoardElementType::TEXT_BABA]);
+            sprite.setTexture(*textures[BoardElementType::TEXT_BABA]);
             break;
         case BoardElementType::TEXT_WALL:
-            sprites[boardElement]->setTexture(*textures[BoardElementType::TEXT_WALL]);
+            sprite.setTexture(*textures[BoardElementType::TEXT_WALL]);
             break;
         case BoardElementType::TEXT_FLAG:
-            sprites[boardElement]->setTexture(*textures[BoardElementType::TEXT_FLAG]);
+            sprite.setTexture(*textures[BoardElementType::TEXT_FLAG]);
             break;
         case BoardElementType::TEXT_ROCK:
-            sprites[boardElement]->setTexture(*textures[BoardElementType::TEXT_ROCK]);
+            sprite.setTexture(*textures[BoardElementType::TEXT_ROCK]);
             break;
         case BoardElementType::TEXT_IS:
-            sprites[boardElement]->setTexture(*textures[BoardElementType::TEXT_IS]);
+            sprite.setTexture(*textures[BoardElementType::TEXT_IS]);
             break;
         case BoardElementType::TEXT_PUSH:
-            sprites[boardElement]->setTexture(*textures[BoardElementType::TEXT_PUSH]);
+            sprite.setTexture(*textures[BoardElementType::TEXT_PUSH]);
             break;
         case BoardElementType::TEXT_YOU:
-            sprites[boardElement]->setTexture(*textures[BoardElementType::TEXT_YOU]);
+            sprite.setTexture(*textures[BoardElementType::TEXT_YOU]);
             break;
         case BoardElementType::TEXT_STOP:
-            sprites[boardElement]->setTexture(*textures[BoardElementType::TEXT_STOP]);
+            sprite.setTexture(*textures[BoardElementType::TEXT_STOP]);
             break;
         case BoardElementType::TEXT_WIN:
-            sprites[boardElement]->setTexture(*textures[BoardElementType::TEXT_WIN]);
+            sprite.setTexture(*textures[BoardElementType::TEXT_WIN]);
             break;
     }
-    sprites[boardElement]->setPosition(xScreen, yScreen);
-    sprites[boardElement]->setScale(s, s);
-    sprites[boardElement]->setTextureRect(sf::IntRect(1, 1, 24, 24));
+    sprite.setPosition(xScreen, yScreen);
+    sprite.setScale(s, s);
+    sprite.setTextureRect(sf::IntRect(1, 1, 24, 24));
 }
 
 float View::calculateSpritesScale()

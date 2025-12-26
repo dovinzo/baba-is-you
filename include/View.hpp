@@ -31,14 +31,6 @@ class View
         ~View();
 
         /**
-         * @brief Met à jour la vue à partir des données du modèle du jeu.
-         *
-         * @param model
-         *        Modèle du jeu en cours.
-         */
-        void update();
-
-        /**
          * @brief Dessine à l'écran (i.e. sur la fenêtre du jeu) la vue.
          *
          * @param window
@@ -53,9 +45,7 @@ class View
 
         void createTextures();
 
-        void createSprites();
-
-        void createSprite(BoardElement* boardElement);
+        void updateSpriteFromBoardElement(sf::Sprite& sprite, BoardElement& boardElement);
 
         float calculateSpritesScale();
 
@@ -70,12 +60,6 @@ class View
          *        pouvant s'afficher à l'écran et leur texture correspondante.
          */
         std::unordered_map<BoardElementType, sf::Texture*> textures;
-
-        /**
-         * @brief Dictionnaire entre chaque élément du board et leur sprite
-         *        correspondant permettant d'afficher l'élément du board à l'écran.
-         */
-        std::unordered_map<BoardElement*, sf::Sprite*> sprites;
 
         Model& model;
 

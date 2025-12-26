@@ -7,17 +7,24 @@
 #include "Model.hpp"
 #include "View.hpp"
 #include "Controller.hpp"
+#include "Observer.hpp"
+#include "Notification.hpp"
 #include <SFML/Graphics.hpp>
 
-class App
+class App: public Observer
 {
     public:
         App();
+        ~App();
         void run();
+        void update(const Notification& notification) override;
     private:
-        void initState();
+        void updateFromVictory();
+        void updateFromQuit();
         void changeState(AppState nextAppState);
+        void initMenu();
         void processMenu();
+        void initLevel();
         void processLevel();
     private:
         sf::RenderWindow* window;
