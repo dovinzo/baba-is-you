@@ -105,6 +105,7 @@ bool Model::undo()
     if (boardSnapshot == nullptr)
         return false;
     board.restore(boardSnapshot);
+    this->updateRules();
     return true;
 }
 
@@ -114,6 +115,7 @@ bool Model::redo()
     if (boardSnapshot == nullptr)
         return false;
     board.restore(boardSnapshot);
+    this->updateRules();
     return true;
 }
 
