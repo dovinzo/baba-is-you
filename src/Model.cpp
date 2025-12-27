@@ -104,7 +104,7 @@ bool Model::undo()
     const BoardSnapshot* boardSnapshot = boardHistory.undo();
     if (boardSnapshot == nullptr)
         return false;
-    board.restore(boardSnapshot);
+    board = *boardSnapshot;
     this->updateRules();
     return true;
 }
@@ -114,7 +114,7 @@ bool Model::redo()
     const BoardSnapshot* boardSnapshot = boardHistory.redo();
     if (boardSnapshot == nullptr)
         return false;
-    board.restore(boardSnapshot);
+    board = *boardSnapshot;
     this->updateRules();
     return true;
 }

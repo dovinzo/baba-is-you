@@ -87,10 +87,8 @@ const BoardSnapshot* Board::makeSnapshot() const
     return new BoardSnapshot{*this};
 }
 
-void Board::restore(const BoardSnapshot* boardSnapshot)
+Board& Board::operator=(const BoardSnapshot& boardSnapshot)
 {
-    if (boardSnapshot == nullptr)
-        return;
     for (int x = 0 ; x < width ; x++)
     {
         for (int y = 0 ; y < height ; y++)
@@ -100,12 +98,13 @@ void Board::restore(const BoardSnapshot* boardSnapshot)
                 delete grid[x][y].back();
                 grid[x][y].pop_back();
            }
-           for (int i = 0 ; i < static_cast<int>(boardSnapshot->grid[x][y].size()) ; i++)
+           for (int i = 0 ; i < static_cast<int>(boardSnapshot.grid[x][y].size()) ; i++)
            {
-               grid[x][y].push_back(new BoardElement{boardSnapshot->grid[x][y][i]->getType(), x, y});
+               grid[x][y].push_back(new BoardElement{boardSnapshot.grid[x][y][i]->getType(), x, y});
            }
         }
     }
+    return *this;
 }
 
 void Board::spawnBoardElement(BoardElementType boardElementType, int x, int y)

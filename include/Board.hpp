@@ -19,7 +19,7 @@ class Board
         std::vector<BoardElement*> getCell(int x, int y) const;
         void setNewPosition(BoardElement* boardElement, int xNew, int yNew);
         const BoardSnapshot* makeSnapshot() const;
-        void restore(const BoardSnapshot* boardSnapshot);
+        Board& operator=(const BoardSnapshot& boardSnapshot);
     private:
         void spawnBoardElement(BoardElementType boardElementType, int x, int y);
         void createEmptyGrid(int width, int height);
