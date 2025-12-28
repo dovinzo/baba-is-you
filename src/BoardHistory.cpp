@@ -19,18 +19,12 @@ BoardHistory::~BoardHistory()
 void BoardHistory::push(const BoardSnapshot* boardSnapshot)
 {
 
-    if (boardSnapshotsForUndo.size() > 100)     
+    if (boardSnapshotsForUndo.size() >= 100)     
     {
         delete this->boardSnapshotsForUndo.front();
         this->boardSnapshotsForUndo.erase(this->boardSnapshotsForUndo.begin());
-        this->boardSnapshotsForUndo.push_back(boardSnapshot);
     }
-    else
-    {
-        this->boardSnapshotsForUndo.push_back(boardSnapshot);
-    }
-
-
+    this->boardSnapshotsForUndo.push_back(boardSnapshot);
     while (not this->boardSnapshotsForRedo.empty())
     {
         delete this->boardSnapshotsForRedo.back();

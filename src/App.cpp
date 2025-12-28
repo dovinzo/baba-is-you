@@ -126,7 +126,8 @@ void App::initLevel()
         levelModel = new Model{menuController->getWhichLevelRequested()};
         levelModel->addObserver(dynamic_cast<Observer*>(this));
         levelView = new View{*levelModel, *window};
-        levelController = new Controller{*window, *levelModel, *levelView};
+        levelController = new Controller{*window, *levelModel};
+        levelController->addObserver(dynamic_cast<Observer*>(this));
     }
     if (menuModel != nullptr)
     {
@@ -148,7 +149,5 @@ void App::processLevel()
         window->clear();
         levelView->draw();
         window->display();
-        if (levelController->getQuitRequested())
-            this->changeState(AppState::QUIT);
     }
 }

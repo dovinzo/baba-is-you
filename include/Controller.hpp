@@ -4,21 +4,17 @@
 #include <SFML/Graphics.hpp>
 #include "Model.hpp"
 #include "View.hpp"
+#include "Subject.hpp"
 
-class Controller
+class Controller: public Subject
 {
     public:
         Controller() = delete;
-        Controller(sf::RenderWindow& window, Model& model, View& view);
+        Controller(sf::RenderWindow& window, Model& model);
         void handleEvent();
-        bool getMenuRequested() const;
-        bool getQuitRequested() const;
     private:
         sf::RenderWindow& window;
         Model& model;
-        View& view;
-        bool menuRequested;
-        bool quitRequested;
 };
 
 #endif
