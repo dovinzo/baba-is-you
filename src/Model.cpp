@@ -357,7 +357,7 @@ void Model::updateVerticalRuleFromCell(int x, int y)
     }
 }
 
-bool Model::isCellFree(int x, int y)
+bool Model::isCellFree(int x, int y) const
 {
     std::vector<BoardElement*> cell = board.getCell(x, y);
     for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)

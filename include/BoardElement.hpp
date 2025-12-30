@@ -4,23 +4,31 @@
 #include "Enums.hpp"
 #include "Rules.hpp"
 
+class Board;
+
+
 class BoardElement
 {
     public:
         BoardElement() = delete;
-        BoardElement(BoardElementType type, int x, int y);
         BoardElement(const BoardElement& boardElement) = delete;
+        ~BoardElement() = default;
         BoardElement& operator=(const BoardElement& boardElement) = delete;
         BoardElementCategory getCategory() const;
         BoardElementType getType() const;
         int getPositionX() const;
         int getPositionY() const;
-        void setPositionX(int x);
-        void setPositionY(int y);
-        static BoardElementType intToBoardElementType(int typeCode);
+
+
+        friend class Board;
     private:
         //static int idCounter;
-        //const int id; Son adresse est déjà un id
+        BoardElement(BoardElementType type, int x, int y);
+
+        static BoardElementType intToBoardElementType(int typeCode);
+        void setPositionX(int x);
+        void setPositionY(int y);
+
         BoardElementType type;
         int x;
         int y;

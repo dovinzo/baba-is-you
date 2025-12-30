@@ -7,23 +7,31 @@
 #include <vector>
 
 class BoardSnapshot;
+class Model;
 
 class Board
 {
     public:
         Board() = delete;
-        Board(int level);
         ~Board();
         int getWidth() const;
         int getHeight() const;
         std::vector<BoardElement*> getCell(int x, int y) const;
-        void setNewPosition(BoardElement* boardElement, int xNew, int yNew);
-        const BoardSnapshot* makeSnapshot() const;
-        Board& operator=(const BoardSnapshot& boardSnapshot);
+
+        friend class Model;
+        friend class BoardSnapshot;
+
+
     private:
+    
+        Board(int level);
+        Board& operator=(const BoardSnapshot& boardSnapshot);
         void spawnBoardElement(BoardElementType boardElementType, int x, int y);
         void createEmptyGrid(int width, int height);
-    private:
+        const BoardSnapshot* makeSnapshot() const;
+        void setNewPosition(BoardElement* boardElement, int xNew, int yNew);
+
+
         int width;
         int height;
         std::vector<BoardElement*>** grid;

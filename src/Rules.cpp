@@ -1,6 +1,10 @@
 #include "Rules.hpp"
 #include "Enums.hpp"
 
+RuleKey::RuleKey(RuleSubject subject, RuleProperty property): subject{subject}, property{property}
+{
+}
+
 bool RuleKey::operator==(const RuleKey& other) const
 {
     return (this->subject == other.subject) and (this->property == other.property);
@@ -15,13 +19,11 @@ Rules::Rules(): rules{}
 {
     std::vector<RuleSubject> ruleSubjects = Rules::getRuleSubjects();
     std::vector<RuleProperty> ruleProperties = Rules::getRuleProperties();
-    RuleKey ruleKey{};
     for (int i = 0 ; i < static_cast<int>(ruleSubjects.size()) ; i++)
     {
         for(int j = 0 ; j < static_cast<int>(ruleProperties.size()) ; j++)
         {
-            ruleKey.subject = ruleSubjects[i];
-            ruleKey.property = ruleProperties[j];
+            RuleKey ruleKey{ruleSubjects[i], ruleProperties[j]};
             rules[ruleKey] = false;
         }
     }
@@ -29,9 +31,7 @@ Rules::Rules(): rules{}
 
 bool Rules::haveRule(RuleSubject ruleSubject, RuleProperty ruleProperty) const
 {
-    RuleKey ruleKey{};
-    ruleKey.subject = ruleSubject;
-    ruleKey.property = ruleProperty;
+    RuleKey ruleKey{ruleSubject, ruleProperty};
     return rules.at(ruleKey);
 }
 
@@ -77,9 +77,7 @@ std::vector<RuleSubject> Rules::getRuleSubjects(RuleProperty ruleProperty)
 
 void Rules::setRule(RuleSubject ruleSubject, RuleProperty ruleProperty)
 {
-    RuleKey ruleKey;
-    ruleKey.subject = ruleSubject;
-    ruleKey.property = ruleProperty;
+    RuleKey ruleKey {ruleSubject, ruleProperty};
     rules[ruleKey] = true;
 }
 
@@ -87,13 +85,11 @@ void Rules::clearRules()
 {
     std::vector<RuleSubject> ruleSubjects = Rules::getRuleSubjects();
     std::vector<RuleProperty> ruleProperties = Rules::getRuleProperties();
-    RuleKey ruleKey;
     for (int i = 0 ; i < static_cast<int>(ruleSubjects.size()) ; i++)
     {
         for(int j = 0 ; j < static_cast<int>(ruleProperties.size()) ; j++)
         {
-            ruleKey.subject = ruleSubjects[i];
-            ruleKey.property = ruleProperties[j];
+            RuleKey ruleKey {ruleSubjects[i], ruleProperties[j]};
             rules[ruleKey] = false;
         }
     }

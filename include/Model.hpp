@@ -10,47 +10,38 @@
 #include <vector>
 #include <set>
 
+class Controller;
+
 class Model: public Subject
 {
     public:
 
         Model() = delete;
+        ~Model() = default;
+        Model& operator=(const Model& model) = delete;
+        Model(const Model& model) = delete;
+
+        int getBoardWidth() const;
+        int getBoardHeight() const;
+        std::vector<BoardElement*> getBoardCell(int x, int y) const;
+
+        friend class Controller;
+
+    private:
 
         Model(int level);
 
-        /**
-         * @brief Essaie de déplacer vers le haut les éléments du board constituant le joueur.
-         */
-        void moveUp();
-
-        /**
-         * @brief Essaie de déplacer vers le bas les éléments du board constituant le joueur.
-         */
-        void moveDown();
-
-        /**
-         * @brief Essaie de déplacer vers la gauche les éléments du board constituant le joueur.
-         */
-        void moveLeft();
-
-        /**
-         * @brief Essaie de déplacer vers la droite les éléments du board constituant le joueur.
-         */
-        void moveRight();
-
+        bool checkWin() const;
         bool undo();
-
         bool redo();
 
-        bool checkWin() const;
-
-        int getBoardWidth() const;
-
-        int getBoardHeight() const;
-
-        std::vector<BoardElement*> getBoardCell(int x, int y) const;
-
-    private:
+    /**
+         * @brief Essaie de déplacer vers  les éléments du board constituant le joueur.
+         */
+        void moveUp();
+        void moveDown();
+        void moveLeft();
+        void moveRight();
 
         /**
          * @brief Table d'association entre le boardElementType d'un BoardElement appartenant à
@@ -116,9 +107,7 @@ class Model: public Subject
          * @param y
          *        Entier compris entre 0 et board.getHeight() inclus.
          */
-        void updateHorizontalRuleFromCell(int x, int y);
 
-        void updateVerticalRuleFromCell(int x, int y);
 
         /**
          * @brief Renvoie vrai si la case (x, y) est libre, sinon faux.
@@ -131,7 +120,12 @@ class Model: public Subject
          * @param y
          *        Entier compris entre 0 et board.getHeight() inclus.
          */
-        bool isCellFree(int x, int y);
+        bool isCellFree(int x, int y) const;
+
+        
+        void updateRules();
+        void updateHorizontalRuleFromCell(int x, int y);
+        void updateVerticalRuleFromCell(int x, int y);
 
         /**
          * @brief Essaie de pousser vers le haut les éléments de la case (x, y).
@@ -153,6 +147,7 @@ class Model: public Subject
 
         void tryPushRight(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou);
 
+
         /**
          * @brief Essaie de déplacer vers le haut les éléments de la case (x, y) constituant le joueur.
          *
@@ -172,10 +167,6 @@ class Model: public Subject
         void tryMoveLeft(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou);
 
         void tryMoveRight(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou);
-
-        void updateRules();
-
-    private:
 
         Board board;
 
