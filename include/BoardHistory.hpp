@@ -5,15 +5,18 @@
 #include "Board.hpp"
 #include <vector>
 
+class Model; 
+
 class BoardHistory
 {
-    public:
+    friend class Model;
+        
+    private:
         BoardHistory() = default;
         ~BoardHistory();
         void push(const BoardSnapshot* boardSnapshot);
         const BoardSnapshot* undo();
         const BoardSnapshot* redo();
-    private:
         std::vector<const BoardSnapshot*> boardSnapshotsForUndo;
         std::vector<const BoardSnapshot*> boardSnapshotsForRedo;
 };

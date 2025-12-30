@@ -5,6 +5,7 @@
 #include "Rules.hpp"
 
 class Board;
+class BoardSnapshot;
 
 
 class BoardElement
@@ -21,6 +22,7 @@ class BoardElement
 
 
         friend class Board;
+        friend class BoardSnapshot;
     private:
         //static int idCounter;
         BoardElement(BoardElementType type, int x, int y);
