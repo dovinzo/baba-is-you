@@ -6,13 +6,17 @@
 #include "View.hpp"
 #include "Subject.hpp"
 
+class App;
+
 class Controller: public Subject
 {
     public:
         Controller() = delete;
         Controller(sf::RenderWindow& window, Model& model);
-        void handleEvent();
+
+        friend class App;
     private:
+        void handleEvent();
         sf::RenderWindow& window;
         Model& model;
 };

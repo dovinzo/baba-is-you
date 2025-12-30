@@ -12,7 +12,7 @@ bool RuleKey::operator==(const RuleKey& other) const
 
 bool RuleKey::operator<(const RuleKey& other) const
 {
-    return (this->subject <= other.subject) and ((this->subject < other.subject) or (this->property < other.property));
+    return (subject < other.subject || (subject == other.subject && property < other.property) );
 }
 
 Rules::Rules(): rules{}

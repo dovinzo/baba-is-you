@@ -133,22 +133,25 @@ void View::updateSpriteFromBoardElement(sf::Sprite& sprite, BoardElement& boardE
     sprite.setTextureRect(sf::IntRect(1, 1, 24, 24));
 }
 
-float View::calculateSpritesScale()
-{
-    int width{model.getBoardWidth()}, height{model.getBoardHeight()};
-    float s;
-    s = (height < width) ? (800.f / (24.f * (float)width)) : (800.f / (24.f * (float)height));
-    return s;
+float View::calculateSpritesScale() {
+    auto size = window.getSize();
+    float cellPx = 24.f;
+    float scaleX = static_cast<float>(size.x) / (cellPx * model.getBoardWidth());
+    float scaleY = static_cast<float>(size.y) / (cellPx * model.getBoardHeight());
+    return std::min(scaleX, scaleY);
 }
 
-int View::convertXGridToXScreen(int xGrid)
-{
-    float s = this->calculateSpritesScale();
-    return (int)(24.f * s * (float)(xGrid));
+int View::convertXGridToXScreen(int xGrid) {
+    float s = calculateSpritesScale();
+    float boardPx = 24.f * s * model.getBoardWidth();
+    float offset = (window.getSize().x - boardPx) * 0.5f;
+    return static_cast<int>(offset + 24.f * s * xGrid);
 }
 
-int View::convertYGridToYScreen(int yGrid)
-{
-    float s = this->calculateSpritesScale();
-    return (int)(24.f * s * (float)(yGrid));
+int View::convertYGridToYScreen(int yGrid) {
+    float s = calculateSpritesScale();
+    float boardPx = 24.f * s * model.getBoardHeight();
+    float offset = (window.getSize().y - boardPx) * 0.5f;
+    return static_cast<int>(offset + 24.f * s * yGrid);
 }
+

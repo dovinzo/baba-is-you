@@ -14,7 +14,9 @@
 
 App::App(): window{nullptr}, appState{AppState::MENU}, menuModel{nullptr}, menuView{nullptr}, menuController{nullptr}, levelModel{nullptr}, levelView{nullptr}, levelController{nullptr}
 {
-    window = new sf::RenderWindow{sf::VideoMode(800, 800), "Baba Is You", sf::Style::Close};
+    sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
+    window = new sf::RenderWindow(desktop, "Baba Is You", sf::Style::Fullscreen);
+    window->setFramerateLimit(60);
     window->setFramerateLimit(60);
     menuModel = new MenuModel;
     menuView = new MenuView{*window, *menuModel};

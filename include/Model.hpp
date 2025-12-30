@@ -26,6 +26,7 @@ class Model: public Subject
         std::vector<BoardElement*> getBoardCell(int x, int y) const;
 
         friend class Controller;
+        friend class App;
 
     private:
 
