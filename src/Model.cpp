@@ -217,6 +217,7 @@ RuleSubject Model::ObjectToRuleSubject(BoardElementType boardElementType)
             ruleSubject = RuleSubject::ROCK;
             break;
         default:
+            throw std::invalid_argument("Problème de convertion BoardElementType -> RuleSubject (Model)");
             break;
     }
     return ruleSubject;
@@ -252,6 +253,7 @@ RuleProperty Model::TextPropertyToRuleProperty(BoardElementType boardElementType
             ruleProperty = RuleProperty::WIN;
             break;
         default:
+            throw std::invalid_argument("Problème de convertion BoardElementType -> RuleProperty (Model)");
             break;
     }
     return ruleProperty;
@@ -275,6 +277,7 @@ RuleSubject Model::TextObjectToRuleSubject(BoardElementType boardElementType)
             ruleSubject = RuleSubject::ROCK;
             break;
         default:
+            throw std::invalid_argument("Problème de convertion BoardElementType -> RuleSubject (Model)");
             break;
     }
     return ruleSubject;
