@@ -110,6 +110,8 @@ void View::updateSpriteFromBoardElement(sf::Sprite& sprite, BoardElement& boardE
         case BoardElementType::TEXT_WIN:
             sprite.setTexture(*textures[BoardElementType::TEXT_WIN]);
             break;
+        case BoardElementType::INVALID:
+            throw std::runtime_error("View::updateSpriteFromBoardElement: boardElement de type INVALID");
     }
     sprite.setPosition(xScreen, yScreen);
     sprite.setScale(s, s);
