@@ -6,6 +6,8 @@
 #include <string> // pour std::string
 #include <sstream> // pour std::istringstream
 #include <iostream>
+#include <cmath>
+
 
 Board::Board(int level): width{}, height{}, grid{}
 {
@@ -14,15 +16,34 @@ Board::Board(int level): width{}, height{}, grid{}
     int x, y, typeCode, width, height;
     BoardElementType boardElementType;
     std::ifstream file{filePath}; // ouvre le fichier en lecture
-    std::getline(file, line);
+    
+    if (!file.is_open()) {
+        throw std::runtime_error("Impossible d'ouvrir " + filePath);
+    }
+
+    if (!std::getline(file, line)) {
+        throw std::runtime_error("Problème de première ligne pour " + filePath);
+    }
+
     std::istringstream iss{line};
     iss >> width >> height;
+
+    if ( std::floor(width) != width  || std::floor(height) != height) {
+        throw std::runtime_error("Problème de première ligne pour " + filePath);
+    }
+
     this->createEmptyGrid(width, height);
     while (std::getline(file, line))
     {
         std::istringstream iss{line};
-        iss >> x >> y >> typeCode;
+        if (!(iss >> x >> y >> typeCode)) continue;
+
         boardElementType = BoardElement::intToBoardElementType(typeCode);
+
+        if (x < 0 || x >= width || y < 0 || y >= height || boardElementType == BoardElementType::INVALID) {
+            std::cerr << "Mauvaise ligne, on skip dans " << filePath << ": " << line << '\n';
+            continue;
+        }
         this->spawnBoardElement(boardElementType, x, y);
     }
 }

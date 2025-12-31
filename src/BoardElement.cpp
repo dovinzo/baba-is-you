@@ -83,6 +83,8 @@ BoardElementType BoardElement::intToBoardElementType(int typeCode)
         case 12:
             boardElementType = BoardElementType::TEXT_WIN;
             break;
+        default: return BoardElementType::INVALID;
+        
     }
     return boardElementType;
 }

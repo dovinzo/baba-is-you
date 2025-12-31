@@ -37,47 +37,30 @@ void View::draw()
     }
 }
 
+sf::Texture* loadTexture(const std::string path) {
+    sf::Texture* tex = new sf::Texture{};
+    if (!tex->loadFromFile(path)) {
+        delete tex;
+        throw std::runtime_error("Problème avec la texture " + path);
+    }
+    return tex;
+}
+
 void View::createTextures()
 {
-    // baba
-    textures[BoardElementType::BABA] = new sf::Texture{};
-    textures[BoardElementType::BABA]->loadFromFile("assets/baba.png");
-    // rock
-    textures[BoardElementType::ROCK] = new sf::Texture{};
-    textures[BoardElementType::ROCK]->loadFromFile("assets/rock.png");
-    // flag
-    textures[BoardElementType::FLAG] = new sf::Texture{};
-    textures[BoardElementType::FLAG]->loadFromFile("assets/flag.png");
-    // wall
-    textures[BoardElementType::WALL] = new sf::Texture{};
-    textures[BoardElementType::WALL]->loadFromFile("assets/wall.png");
-    // text is
-    textures[BoardElementType::TEXT_IS] = new sf::Texture{};
-    textures[BoardElementType::TEXT_IS]->loadFromFile("assets/text_is.png");
-    // text baba
-    textures[BoardElementType::TEXT_BABA] = new sf::Texture{};
-    textures[BoardElementType::TEXT_BABA]->loadFromFile("assets/text_baba.png");
-    // text you
-    textures[BoardElementType::TEXT_YOU] = new sf::Texture{};
-    textures[BoardElementType::TEXT_YOU]->loadFromFile("assets/text_you.png");
-    // text wall
-    textures[BoardElementType::TEXT_WALL] = new sf::Texture{};
-    textures[BoardElementType::TEXT_WALL]->loadFromFile("assets/text_wall.png");
-    // text push
-    textures[BoardElementType::TEXT_PUSH] = new sf::Texture{};
-    textures[BoardElementType::TEXT_PUSH]->loadFromFile("assets/text_push.png");
-    // text flag
-    textures[BoardElementType::TEXT_FLAG] = new sf::Texture{};
-    textures[BoardElementType::TEXT_FLAG]->loadFromFile("assets/text_flag.png");
-    // text win
-    textures[BoardElementType::TEXT_WIN] = new sf::Texture{};
-    textures[BoardElementType::TEXT_WIN]->loadFromFile("assets/text_win.png");
-    // text rock
-    textures[BoardElementType::TEXT_ROCK] = new sf::Texture{};
-    textures[BoardElementType::TEXT_ROCK]->loadFromFile("assets/text_rock.png");
-    // text stop
-    textures[BoardElementType::TEXT_STOP] = new sf::Texture{};
-    textures[BoardElementType::TEXT_STOP]->loadFromFile("assets/text_stop.png");
+    textures[BoardElementType::BABA] = loadTexture("assets/baba.png");
+    textures[BoardElementType::ROCK] = loadTexture("assets/rock.png");
+    textures[BoardElementType::FLAG] = loadTexture("assets/flag.png");
+    textures[BoardElementType::WALL] = loadTexture("assets/wall.png");
+    textures[BoardElementType::TEXT_IS] = loadTexture("assets/text_is.png");
+    textures[BoardElementType::TEXT_BABA] = loadTexture("assets/text_baba.png");
+    textures[BoardElementType::TEXT_YOU] = loadTexture("assets/text_you.png");
+    textures[BoardElementType::TEXT_WALL] = loadTexture("assets/text_wall.png");
+    textures[BoardElementType::TEXT_PUSH] = loadTexture("assets/text_push.png");
+    textures[BoardElementType::TEXT_FLAG] = loadTexture("assets/text_flag.png");
+    textures[BoardElementType::TEXT_WIN] = loadTexture("assets/text_win.png");
+    textures[BoardElementType::TEXT_ROCK] = loadTexture("assets/text_rock.png");
+    textures[BoardElementType::TEXT_STOP] = loadTexture("assets/text_stop.png");
 }
 
 void View::updateSpriteFromBoardElement(sf::Sprite& sprite, BoardElement& boardElement)

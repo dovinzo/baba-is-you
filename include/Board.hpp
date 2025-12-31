@@ -14,6 +14,7 @@ class Board
     public:
         Board() = delete;
         ~Board();
+        Board(const Board& board) = delete;
         int getWidth() const;
         int getHeight() const;
         std::vector<BoardElement*> getCell(int x, int y) const;

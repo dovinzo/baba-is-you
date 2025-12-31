@@ -15,7 +15,8 @@ enum class BoardElementType
     TEXT_PUSH,
     TEXT_YOU,
     TEXT_STOP,
-    TEXT_WIN
+    TEXT_WIN, 
+    INVALID
 };
 
 enum class BoardElementCategory

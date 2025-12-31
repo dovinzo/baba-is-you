@@ -10,10 +10,17 @@ class Model;
 class BoardHistory
 {
     friend class Model;
+
+    public : 
+        BoardHistory(const BoardHistory& other) = delete;
+        BoardHistory& operator=(const BoardHistory& other) = delete;
+        ~BoardHistory();
         
     private:
         BoardHistory() = default;
-        ~BoardHistory();
+       
+
+
         void push(const BoardSnapshot* boardSnapshot);
         const BoardSnapshot* undo();
         const BoardSnapshot* redo();
