@@ -15,9 +15,16 @@ void Model::moveUp()
 {
     int x, y;
     std::vector<BoardElement*> boardElementsYou = this->getBoardElements(RuleProperty::YOU);
+
+
     std::set<BoardElement*> visitedBoardElementsYou;
     for (int i = 0 ; i < static_cast<int>(boardElementsYou.size()) ; i++)
     {
+        if (boardElementHasProperty(*boardElementsYou[i], RuleProperty::STOP))
+            continue;
+            
+
+
         if (visitedBoardElementsYou.count(boardElementsYou[i]))
             continue;
         x = boardElementsYou[i]->getPositionX();
@@ -41,6 +48,8 @@ void Model::moveDown()
     std::set<BoardElement*> visitedBoardElementsYou;
     for (int i = 0 ; i < static_cast<int>(boardElementsYou.size()) ; i++)
     {
+        if (boardElementHasProperty(*boardElementsYou[i], RuleProperty::STOP))
+            continue;
         if (visitedBoardElementsYou.count(boardElementsYou[i]))
             continue;
         x = boardElementsYou[i]->getPositionX();
@@ -64,6 +73,8 @@ void Model::moveLeft()
     std::set<BoardElement*> visitedBoardElementsYou;
     for (int i = 0 ; i < static_cast<int>(boardElementsYou.size()) ; i++)
     {
+        if (boardElementHasProperty(*boardElementsYou[i], RuleProperty::STOP))
+            continue;
         if (visitedBoardElementsYou.count(boardElementsYou[i]))
             continue;
         x = boardElementsYou[i]->getPositionX();
@@ -87,6 +98,8 @@ void Model::moveRight()
     std::set<BoardElement*> visitedBoardElementsYou;
     for (int i = 0 ; i < static_cast<int>(boardElementsYou.size()) ; i++)
     {
+        if (boardElementHasProperty(*boardElementsYou[i], RuleProperty::STOP))
+            continue;
         if (visitedBoardElementsYou.count(boardElementsYou[i]))
             continue;
         x = boardElementsYou[i]->getPositionX();
@@ -156,6 +169,10 @@ void Model::sink()  {
         {
             cell = board.getCell(x, y);
             bool killCell = false;
+            if (cell.size() == 0)
+                if (this->boardElementHasProperty(*(cell[0]), RuleProperty::SINK) && this->boardElementHasProperty(*(cell[0]), RuleProperty::YOU)) 
+                    killCell = true;
+
             if (cell.size() > 1) {
                 for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
                 {
