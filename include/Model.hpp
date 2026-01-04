@@ -33,6 +33,10 @@ class Model: public Subject
         Model(int level);
 
         bool checkWin() const;
+
+        // supprime les éléments qui doivent disappear
+        void sink() ;
+
         bool undo();
         bool redo();
 

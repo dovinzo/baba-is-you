@@ -31,6 +31,7 @@ class Board
         void createEmptyGrid(int width, int height);
         const BoardSnapshot* makeSnapshot() const;
         void setNewPosition(BoardElement* boardElement, int xNew, int yNew);
+        void killCell(int x, int y);
 
 
         int width;

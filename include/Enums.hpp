@@ -7,6 +7,7 @@ enum class BoardElementType
     WALL,
     FLAG,
     ROCK,
+    WATER,
     TEXT_BABA,
     TEXT_WALL,
     TEXT_FLAG,
@@ -15,7 +16,9 @@ enum class BoardElementType
     TEXT_PUSH,
     TEXT_YOU,
     TEXT_STOP,
-    TEXT_WIN, 
+    TEXT_WIN,
+    TEXT_WATER,
+    TEXT_SINK,
     INVALID
 };
 
@@ -40,7 +43,8 @@ enum class RuleSubject
     BABA,
     WALL,
     FLAG,
-    ROCK
+    ROCK,
+    WATER
 };
 
 enum class RuleProperty
@@ -52,7 +56,9 @@ enum class RuleProperty
     PUSH,
     YOU,
     STOP,
-    WIN
+    WIN,
+    SINK,
+    WATER
 };
 
 enum class AppState

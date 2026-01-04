@@ -27,6 +27,7 @@ void Model::moveUp()
     if (not visitedBoardElementsYou.empty())
     {
         this->updateRules();
+        this->sink();
         boardHistory.push(board.makeSnapshot());
         if (this->checkWin())
             this->notifyObservers(Victory{});
@@ -49,6 +50,7 @@ void Model::moveDown()
     if (not visitedBoardElementsYou.empty())
     {
         this->updateRules();
+        this->sink();
         boardHistory.push(board.makeSnapshot());
         if (this->checkWin())
             this->notifyObservers(Victory{});
@@ -71,6 +73,7 @@ void Model::moveLeft()
     if (not visitedBoardElementsYou.empty())
     {
         this->updateRules();
+        this->sink();
         boardHistory.push(board.makeSnapshot());
         if (this->checkWin())
             this->notifyObservers(Victory{});
@@ -93,6 +96,7 @@ void Model::moveRight()
     if (not visitedBoardElementsYou.empty())
     {
         this->updateRules();
+        this->sink();
         boardHistory.push(board.makeSnapshot());
         if (this->checkWin())
             this->notifyObservers(Victory{});
@@ -142,6 +146,36 @@ bool Model::checkWin() const
         }
     }
     return false;
+}
+
+void Model::sink()  {
+    std::vector<BoardElement*> cell;
+    for (int x = 0 ; x < board.getWidth() ; x++)
+    {
+        for (int y = 0 ; y < board.getHeight() ; y++)
+        {
+            cell = board.getCell(x, y);
+            bool killCell = false;
+            if (cell.size() > 1) {
+                for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
+                {
+                    if (this->boardElementHasProperty(*(cell[i]), RuleProperty::SINK))
+                    {
+                        killCell = true;
+                        break;
+                    }
+                }
+            }
+           
+            if (killCell) {
+                for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
+                {
+                    board.killCell(x,y); 
+                }
+            }
+        }
+    }
+
 }
 
 int Model::getBoardWidth() const
@@ -216,6 +250,9 @@ RuleSubject Model::ObjectToRuleSubject(BoardElementType boardElementType)
         case BoardElementType::ROCK:
             ruleSubject = RuleSubject::ROCK;
             break;
+        case BoardElementType::WATER:
+            ruleSubject = RuleSubject::WATER;
+            break;
         default:
             throw std::invalid_argument("Problème de convertion BoardElementType -> RuleSubject (Model)");
             break;
@@ -252,6 +289,9 @@ RuleProperty Model::TextPropertyToRuleProperty(BoardElementType boardElementType
         case BoardElementType::TEXT_WIN:
             ruleProperty = RuleProperty::WIN;
             break;
+        case BoardElementType::TEXT_SINK:
+            ruleProperty = RuleProperty::SINK;
+            break;
         default:
             throw std::invalid_argument("Problème de convertion BoardElementType -> RuleProperty (Model)");
             break;
@@ -275,6 +315,9 @@ RuleSubject Model::TextObjectToRuleSubject(BoardElementType boardElementType)
             break;
         case BoardElementType::TEXT_ROCK:
             ruleSubject = RuleSubject::ROCK;
+            break;
+        case BoardElementType::TEXT_WATER:
+            ruleSubject = RuleSubject::WATER;
             break;
         default:
             throw std::invalid_argument("Problème de convertion BoardElementType -> RuleSubject (Model)");

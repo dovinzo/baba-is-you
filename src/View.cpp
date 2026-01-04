@@ -52,6 +52,7 @@ void View::createTextures()
     textures[BoardElementType::ROCK] = loadTexture("assets/rock.png");
     textures[BoardElementType::FLAG] = loadTexture("assets/flag.png");
     textures[BoardElementType::WALL] = loadTexture("assets/wall.png");
+    textures[BoardElementType::WATER] = loadTexture("assets/water.png");
     textures[BoardElementType::TEXT_IS] = loadTexture("assets/text_is.png");
     textures[BoardElementType::TEXT_BABA] = loadTexture("assets/text_baba.png");
     textures[BoardElementType::TEXT_YOU] = loadTexture("assets/text_you.png");
@@ -61,6 +62,9 @@ void View::createTextures()
     textures[BoardElementType::TEXT_WIN] = loadTexture("assets/text_win.png");
     textures[BoardElementType::TEXT_ROCK] = loadTexture("assets/text_rock.png");
     textures[BoardElementType::TEXT_STOP] = loadTexture("assets/text_stop.png");
+    textures[BoardElementType::TEXT_WATER] = loadTexture("assets/text_water.png");
+    textures[BoardElementType::TEXT_SINK] = loadTexture("assets/text_sink.png");
+    textures[BoardElementType::INVALID] = nullptr;
 }
 
 void View::updateSpriteFromBoardElement(sf::Sprite& sprite, BoardElement& boardElement)
@@ -82,6 +86,9 @@ void View::updateSpriteFromBoardElement(sf::Sprite& sprite, BoardElement& boardE
             break;
         case BoardElementType::ROCK:
             sprite.setTexture(*textures[BoardElementType::ROCK]);
+            break;
+        case BoardElementType::WATER:
+            sprite.setTexture(*textures[BoardElementType::WATER]);
             break;
         case BoardElementType::TEXT_BABA:
             sprite.setTexture(*textures[BoardElementType::TEXT_BABA]);
@@ -109,6 +116,12 @@ void View::updateSpriteFromBoardElement(sf::Sprite& sprite, BoardElement& boardE
             break;
         case BoardElementType::TEXT_WIN:
             sprite.setTexture(*textures[BoardElementType::TEXT_WIN]);
+            break;
+        case BoardElementType::TEXT_WATER:
+            sprite.setTexture(*textures[BoardElementType::TEXT_WATER]);
+            break;
+        case BoardElementType::TEXT_SINK:
+            sprite.setTexture(*textures[BoardElementType::TEXT_SINK]);
             break;
         case BoardElementType::INVALID:
             throw std::runtime_error("View::updateSpriteFromBoardElement: boardElement de type INVALID");

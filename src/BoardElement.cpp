@@ -21,12 +21,14 @@ BoardElementCategory BoardElement::getCategory() const
         case BoardElementType::WALL:
         case BoardElementType::FLAG:
         case BoardElementType::ROCK:
+        case BoardElementType::WATER:
             boardElementCategory = BoardElementCategory::OBJECT;
             break;
         case BoardElementType::TEXT_BABA:
         case BoardElementType::TEXT_WALL:
         case BoardElementType::TEXT_FLAG:
         case BoardElementType::TEXT_ROCK:
+        case BoardElementType::TEXT_WATER:
             boardElementCategory = BoardElementCategory::TEXT_OBJECT;
             break;
         case BoardElementType::TEXT_IS:
@@ -83,6 +85,15 @@ BoardElementType BoardElement::intToBoardElementType(int typeCode)
         case 12:
             boardElementType = BoardElementType::TEXT_WIN;
             break;
+        case 13:
+            boardElementType = BoardElementType::TEXT_WATER;
+            break;
+        case 14:
+            boardElementType = BoardElementType::TEXT_SINK;
+            break;
+        case 15:
+            boardElementType = BoardElementType::WATER;
+            break;    
         default: return BoardElementType::INVALID;
         
     }

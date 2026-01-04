@@ -9,6 +9,7 @@
 #include <cmath>
 
 
+
 Board::Board(int level): width{}, height{}, grid{}
 {
     std::string filePath = "assets/level" + std::to_string(level) + ".txt";
@@ -137,3 +138,12 @@ std::vector<BoardElement*> Board::getCell(int x, int y) const
 {
     return grid[x][y];
 }
+
+void Board::killCell(int x, int y)
+{
+    while (not grid[x][y].empty())
+    {
+        delete grid[x][y].back();
+        grid[x][y].pop_back();
+    }
+} 

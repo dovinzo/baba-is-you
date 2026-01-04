@@ -38,18 +38,19 @@ bool Rules::haveRule(RuleSubject ruleSubject, RuleProperty ruleProperty) const
 std::vector<RuleSubject> Rules::getRuleSubjects()
 {
     std::vector<RuleSubject> ruleSubjects{};
-    ruleSubjects.reserve(4);
+    ruleSubjects.reserve(5);
     ruleSubjects.push_back(RuleSubject::BABA);
     ruleSubjects.push_back(RuleSubject::WALL);
     ruleSubjects.push_back(RuleSubject::FLAG);
     ruleSubjects.push_back(RuleSubject::ROCK);
+    ruleSubjects.push_back(RuleSubject::WATER);
     return ruleSubjects;
 }
 
 std::vector<RuleProperty> Rules::getRuleProperties()
 {
     std::vector<RuleProperty> ruleProperties{};
-    ruleProperties.reserve(8);
+    ruleProperties.reserve(10);
     ruleProperties.push_back(RuleProperty::BABA);
     ruleProperties.push_back(RuleProperty::WALL);
     ruleProperties.push_back(RuleProperty::FLAG);
@@ -58,6 +59,8 @@ std::vector<RuleProperty> Rules::getRuleProperties()
     ruleProperties.push_back(RuleProperty::YOU);
     ruleProperties.push_back(RuleProperty::STOP);
     ruleProperties.push_back(RuleProperty::WIN);
+    ruleProperties.push_back(RuleProperty::SINK);
+    ruleProperties.push_back(RuleProperty::WATER);
     return ruleProperties;
 }
 
