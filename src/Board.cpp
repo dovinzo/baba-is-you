@@ -124,7 +124,7 @@ void Board::spawnBoardElement(BoardElementType boardElementType, int x, int y)
     grid[x][y].push_back(new BoardElement{boardElementType, x, y});
 }
 
-std::vector<BoardElement*> Board::getCell(int x, int y) const
+std::vector<BoardElement*> Board::operator()(int x, int y) const
 {
     return grid[x][y];
 }

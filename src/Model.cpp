@@ -1,4 +1,5 @@
 #include "Model.hpp"
+#include <vector>
 
 Model::Model(int level): board{level}, rules{}, boardHistory{}
 {
@@ -6,90 +7,51 @@ Model::Model(int level): board{level}, rules{}, boardHistory{}
     boardHistory.push(board.makeSnapshot());
 }
 
+std::vector<BoardElement*> Model::operator[](RuleProperty property) const
+{
+    std::vector<BoardElement*> elements;
+    std::vector<BoardElement*> cell;
+    for (int x = 0 ; x < board.getWidth() ; x++)
+    {
+        for (int y = 0 ; y < board.getHeight() ; y++)
+        {
+            cell = board(x, y);
+            for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
+            {
+                if (this->boardElementHasProperty(*(cell[i]), property))
+                {
+                    elements.push_back(cell[i]);
+                }
+            }
+        }
+    }
+    return elements;
+}
+
 void Model::moveUp()
 {
-    int x, y;
-    std::vector<BoardElement*> boardElementsYou = this->getBoardElements(RuleProperty::YOU);
-
-
-    std::set<BoardElement*> visitedBoardElementsYou;
-    for (int i = 0 ; i < static_cast<int>(boardElementsYou.size()) ; i++)
-    {
-        if (boardElementHasProperty(*boardElementsYou[i], RuleProperty::STOP))
-            continue;
-            
-
-
-        if (visitedBoardElementsYou.count(boardElementsYou[i]))
-            continue;
-        x = boardElementsYou[i]->getPositionX();
-        y = boardElementsYou[i]->getPositionY();
-        this->tryMoveUp(x, y, visitedBoardElementsYou);
-    }
-    if (not visitedBoardElementsYou.empty())
-    {
-        this->updateRules();
-        this->sink();
-        boardHistory.push(board.makeSnapshot());
-        if (this->checkWin())
-            this->notifyObservers(Victory{});
-    }
+    this->move(Direction::UP);
 }
 
 void Model::moveDown()
 {
-    int x, y;
-    std::vector<BoardElement*> boardElementsYou = this->getBoardElements(RuleProperty::YOU);
-    std::set<BoardElement*> visitedBoardElementsYou;
-    for (int i = 0 ; i < static_cast<int>(boardElementsYou.size()) ; i++)
-    {
-        if (boardElementHasProperty(*boardElementsYou[i], RuleProperty::STOP))
-            continue;
-        if (visitedBoardElementsYou.count(boardElementsYou[i]))
-            continue;
-        x = boardElementsYou[i]->getPositionX();
-        y = boardElementsYou[i]->getPositionY();
-        this->tryMoveDown(x, y, visitedBoardElementsYou);
-    }
-    if (not visitedBoardElementsYou.empty())
-    {
-        this->updateRules();
-        this->sink();
-        boardHistory.push(board.makeSnapshot());
-        if (this->checkWin())
-            this->notifyObservers(Victory{});
-    }
+    this->move(Direction::DOWN);
 }
 
 void Model::moveLeft()
 {
-    int x, y;
-    std::vector<BoardElement*> boardElementsYou = this->getBoardElements(RuleProperty::YOU);
-    std::set<BoardElement*> visitedBoardElementsYou;
-    for (int i = 0 ; i < static_cast<int>(boardElementsYou.size()) ; i++)
-    {
-        if (boardElementHasProperty(*boardElementsYou[i], RuleProperty::STOP))
-            continue;
-        if (visitedBoardElementsYou.count(boardElementsYou[i]))
-            continue;
-        x = boardElementsYou[i]->getPositionX();
-        y = boardElementsYou[i]->getPositionY();
-        this->tryMoveLeft(x, y, visitedBoardElementsYou);
-    }
-    if (not visitedBoardElementsYou.empty())
-    {
-        this->updateRules();
-        this->sink();
-        boardHistory.push(board.makeSnapshot());
-        if (this->checkWin())
-            this->notifyObservers(Victory{});
-    }
+    this->move(Direction::LEFT);
 }
 
 void Model::moveRight()
 {
+    this->move(Direction::RIGHT);
+}
+
+void Model::move(Direction direction)
+{
     int x, y;
-    std::vector<BoardElement*> boardElementsYou = this->getBoardElements(RuleProperty::YOU);
+    std::vector<BoardElement*> boardElementsYou = (*this)[RuleProperty::YOU];
     std::set<BoardElement*> visitedBoardElementsYou;
     for (int i = 0 ; i < static_cast<int>(boardElementsYou.size()) ; i++)
     {
@@ -99,7 +61,7 @@ void Model::moveRight()
             continue;
         x = boardElementsYou[i]->getPositionX();
         y = boardElementsYou[i]->getPositionY();
-        this->tryMoveRight(x, y, visitedBoardElementsYou);
+        this->tryMove(x, y, visitedBoardElementsYou, direction);
     }
     if (not visitedBoardElementsYou.empty())
     {
@@ -141,7 +103,7 @@ bool Model::checkWin() const
         {
             hasYou = false;
             hasWin = false;
-            cell = board.getCell(x, y);
+            cell = board(x, y);
             for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
             {
                 if (this->boardElementHasProperty(*(cell[i]), RuleProperty::YOU))
@@ -162,7 +124,7 @@ void Model::sink()  {
     {
         for (int y = 0 ; y < board.getHeight() ; y++)
         {
-            cell = board.getCell(x, y);
+            cell = board(x, y);
             bool killCell = false;
             if (cell.size() == 1 && this->boardElementHasProperty(*(cell[0]), RuleProperty::SINK) && this->boardElementHasProperty(*(cell[0]), RuleProperty::YOU)) 
                 killCell = true;
@@ -200,28 +162,7 @@ int Model::getBoardHeight() const
 
 std::vector<BoardElement*> Model::getBoardCell(int x, int y) const
 {
-    return board.getCell(x, y);
-}
-
-std::vector<BoardElement*> Model::getBoardElements(RuleProperty ruleProperty)
-{
-    std::vector<BoardElement*> boardElements;
-    std::vector<BoardElement*> cell;
-    for (int x = 0 ; x < board.getWidth() ; x++)
-    {
-        for (int y = 0 ; y < board.getHeight() ; y++)
-        {
-            cell = board.getCell(x, y);
-            for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
-            {
-                if (this->boardElementHasProperty(*(cell[i]), ruleProperty))
-                {
-                    boardElements.push_back(cell[i]);
-                }
-            }
-        }
-    }
-    return boardElements;
+    return board(x, y);
 }
 
 void Model::updateRules()
@@ -357,9 +298,9 @@ void Model::updateHorizontalRuleFromCell(int x, int y)
 {
     RuleSubject ruleSubject;
     RuleProperty ruleProperty;
-    std::vector<BoardElement*> cellxy = board.getCell(x, y);
-    std::vector<BoardElement*> cellxplus1y = board.getCell(x+1, y);
-    std::vector<BoardElement*> cellxplus2y = board.getCell(x+2, y);
+    std::vector<BoardElement*> cellxy = board(x, y);
+    std::vector<BoardElement*> cellxplus1y = board(x+1, y);
+    std::vector<BoardElement*> cellxplus2y = board(x+2, y);
     for (int i = 0 ; i < static_cast<int>(cellxy.size()) ; i++)
     {
         if (cellxy[i]->getCategory() == BoardElementCategory::TEXT_OBJECT)
@@ -387,9 +328,9 @@ void Model::updateVerticalRuleFromCell(int x, int y)
 {
     RuleSubject ruleSubject;
     RuleProperty ruleProperty;
-    std::vector<BoardElement*> cellxy = board.getCell(x, y);
-    std::vector<BoardElement*> cellxyplus1 = board.getCell(x, y+1);
-    std::vector<BoardElement*> cellxyplus2 = board.getCell(x, y+2);
+    std::vector<BoardElement*> cellxy = board(x, y);
+    std::vector<BoardElement*> cellxyplus1 = board(x, y+1);
+    std::vector<BoardElement*> cellxyplus2 = board(x, y+2);
     for (int i = 0 ; i < static_cast<int>(cellxy.size()) ; i++)
     {
         if (cellxy[i]->getCategory() == BoardElementCategory::TEXT_OBJECT)
@@ -415,7 +356,7 @@ void Model::updateVerticalRuleFromCell(int x, int y)
 
 bool Model::isCellFree(int x, int y) const
 {
-    std::vector<BoardElement*> cell = board.getCell(x, y);
+    std::vector<BoardElement*> cell = board(x, y);
     for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
     {
         if (this->boardElementHasProperty(*(cell[i]), RuleProperty::STOP))
@@ -426,10 +367,35 @@ bool Model::isCellFree(int x, int y) const
     return true;
 }
 
-void Model::tryPushUp(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou)
+void Model::tryPush(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou, Direction direction)
 {
-    std::vector<BoardElement*> cell = board.getCell(x, y);
+    std::vector<BoardElement*> cell = board(x, y);
     bool hasStop{false}, hasYou{false}, hasPush{false};
+    bool edge;
+    int dx, dy;
+    switch (direction)
+    {
+        case Direction::UP:
+            edge = (y == 0);
+            dx = 0;
+            dy = -1;
+            break;
+        case Direction::DOWN:
+            edge = (y == board.getHeight() - 1);
+            dx = 0;
+            dy = 1;
+            break;
+        case Direction::LEFT:
+            edge = (x == 0);
+            dx = -1;
+            dy = 0;
+            break;
+        case Direction::RIGHT:
+            edge = (x == board.getWidth() - 1);
+            dx = 1;
+            dy = 0;
+            break;
+    }
     for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
     {
         if (this->boardElementHasProperty(*(cell[i]), RuleProperty::STOP))
@@ -439,193 +405,64 @@ void Model::tryPushUp(int x, int y, std::set<BoardElement*>& visitedBoardElement
         if (this->boardElementHasProperty(*(cell[i]), RuleProperty::PUSH))
             hasPush = true;
     }
-    if (hasStop or not hasPush or hasYou or y == 0)
+    if (hasStop or not hasPush or hasYou or edge)
         return;
-    this->tryPushUp(x, y-1, visitedBoardElementsYou);
-    this->tryMoveUp(x, y-1, visitedBoardElementsYou);
-    if (not this->isCellFree(x, y-1))
+    this->tryPush(x+dx, y+dy, visitedBoardElementsYou, direction);
+    this->tryMove(x+dx, y+dy, visitedBoardElementsYou, direction);
+    if (not this->isCellFree(x+dx, y+dy))
         return;
     for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
     {
         if (this->boardElementHasProperty(*(cell[i]), RuleProperty::PUSH))
-            board.setNewPosition(cell[i], x, y-1);
+            board.setNewPosition(cell[i], x+dx, y+dy);
     }
 }
 
-
-void Model::tryPushDown(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou)
+void Model::tryMove(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou, Direction direction)
 {
-    std::vector<BoardElement*> cell = board.getCell(x, y);
-    bool hasStop{false}, hasYou{false}, hasPush{false};
-    for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
-    {
-        if (this->boardElementHasProperty(*(cell[i]), RuleProperty::STOP))
-            hasStop = true;
-        if (this->boardElementHasProperty(*(cell[i]), RuleProperty::YOU))
-            hasYou = true;
-        if (this->boardElementHasProperty(*(cell[i]), RuleProperty::PUSH))
-            hasPush = true;
-    }
-    if (hasStop or not hasPush or hasYou or y == board.getHeight() - 1)
-        return;
-    this->tryPushDown(x, y+1, visitedBoardElementsYou);
-    this->tryMoveDown(x, y+1, visitedBoardElementsYou);
-    if (not this->isCellFree(x, y+1))
-        return;
-    for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
-    {
-        if (this->boardElementHasProperty(*(cell[i]), RuleProperty::PUSH))
-            board.setNewPosition(cell[i], x, y+1);
-    }
-}
-
-void Model::tryPushLeft(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou)
-{
-    std::vector<BoardElement*> cell = board.getCell(x, y);
-    bool hasStop{false}, hasYou{false}, hasPush{false};
-    for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
-    {
-        if (this->boardElementHasProperty(*(cell[i]), RuleProperty::STOP))
-            hasStop = true;
-        if (this->boardElementHasProperty(*(cell[i]), RuleProperty::YOU))
-            hasYou = true;
-        if (this->boardElementHasProperty(*(cell[i]), RuleProperty::PUSH))
-            hasPush = true;
-    }
-    if (hasStop or not hasPush or hasYou or x == 0)
-        return;
-    this->tryPushLeft(x-1, y, visitedBoardElementsYou);
-    this->tryMoveLeft(x-1, y, visitedBoardElementsYou);
-    if (not this->isCellFree(x-1, y))
-        return;
-    for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
-    {
-        if (this->boardElementHasProperty(*(cell[i]), RuleProperty::PUSH))
-            board.setNewPosition(cell[i], x-1, y);
-    }
-}
-
-void Model::tryPushRight(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou)
-{
-    std::vector<BoardElement*> cell = board.getCell(x, y);
-    bool hasStop{false}, hasYou{false}, hasPush{false};
-    for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
-    {
-        if (this->boardElementHasProperty(*(cell[i]), RuleProperty::STOP))
-            hasStop = true;
-        if (this->boardElementHasProperty(*(cell[i]), RuleProperty::YOU))
-            hasYou = true;
-        if (this->boardElementHasProperty(*(cell[i]), RuleProperty::PUSH))
-            hasPush = true;
-    }
-    if (hasStop or not hasPush or hasYou or x == board.getWidth() - 1)
-        return;
-    this->tryPushRight(x+1, y, visitedBoardElementsYou);
-    this->tryMoveRight(x+1, y, visitedBoardElementsYou);
-    if (not this->isCellFree(x+1, y))
-        return;
-    for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
-    {
-        if (this->boardElementHasProperty(*(cell[i]), RuleProperty::PUSH))
-            board.setNewPosition(cell[i], x+1, y);
-    }
-}
-
-void Model::tryMoveUp(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou)
-{
-    std::vector<BoardElement*> cell = board.getCell(x, y);
+    std::vector<BoardElement*> cell = board(x, y);
     bool hasYou{false};
+    bool edge;
+    int dx, dy;
+    switch (direction)
+    {
+        case Direction::UP:
+            edge = (y == 0);
+            dx = 0;
+            dy = -1;
+            break;
+        case Direction::DOWN:
+            edge = (y == board.getHeight() - 1);
+            dx = 0;
+            dy = 1;
+            break;
+        case Direction::LEFT:
+            edge = (x == 0);
+            dx = -1;
+            dy = 0;
+            break;
+        case Direction::RIGHT:
+            edge = (x == board.getWidth() - 1);
+            dx = 1;
+            dy = 0;
+            break;
+    }
     for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
     {
         if (this->boardElementHasProperty(*(cell[i]), RuleProperty::YOU))
             hasYou = true;
     }
-    if (not hasYou or y == 0)
+    if (not hasYou or edge)
         return;
-    this->tryPushUp(x, y-1, visitedBoardElementsYou);
-    this->tryMoveUp(x, y-1, visitedBoardElementsYou);
-    if (not this->isCellFree(x, y-1))
+    this->tryPush(x+dx, y+dy, visitedBoardElementsYou, direction);
+    this->tryMove(x+dx, y+dy, visitedBoardElementsYou, direction);
+    if (not this->isCellFree(x+dx, y+dy))
         return;
     for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
     {
         if (this->boardElementHasProperty(*(cell[i]), RuleProperty::YOU))
         {
-            board.setNewPosition(cell[i], x, y-1);
-            visitedBoardElementsYou.insert(cell[i]);
-        }
-    }
-}
-
-void Model::tryMoveDown(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou)
-{
-    std::vector<BoardElement*> cell = board.getCell(x, y);
-    bool hasYou{false};
-    for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
-    {
-        if (this->boardElementHasProperty(*(cell[i]), RuleProperty::YOU))
-            hasYou = true;
-    }
-    if (not hasYou or y == board.getHeight() - 1)
-        return;
-    this->tryPushDown(x, y+1, visitedBoardElementsYou);
-    this->tryMoveDown(x, y+1, visitedBoardElementsYou);
-    if (not this->isCellFree(x, y+1))
-        return;
-    for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
-    {
-        if (this->boardElementHasProperty(*(cell[i]), RuleProperty::YOU))
-        {
-            board.setNewPosition(cell[i], x, y+1);
-            visitedBoardElementsYou.insert(cell[i]);
-        }
-    }
-}
-
-void Model::tryMoveLeft(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou)
-{
-    std::vector<BoardElement*> cell = board.getCell(x, y);
-    bool hasYou{false};
-    for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
-    {
-        if (this->boardElementHasProperty(*(cell[i]), RuleProperty::YOU))
-            hasYou = true;
-    }
-    if (not hasYou or x == 0)
-        return;
-    this->tryPushLeft(x-1, y, visitedBoardElementsYou);
-    this->tryMoveLeft(x-1, y, visitedBoardElementsYou);
-    if (not this->isCellFree(x-1, y))
-        return;
-    for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
-    {
-        if (this->boardElementHasProperty(*(cell[i]), RuleProperty::YOU))
-        {
-            board.setNewPosition(cell[i], x-1, y);
-            visitedBoardElementsYou.insert(cell[i]);
-        }
-    }
-}
-
-void Model::tryMoveRight(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou)
-{
-    std::vector<BoardElement*> cell = board.getCell(x, y);
-    bool hasYou{false};
-    for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
-    {
-        if (this->boardElementHasProperty(*(cell[i]), RuleProperty::YOU))
-            hasYou = true;
-    }
-    if (not hasYou or x == board.getWidth() - 1)
-        return;
-    this->tryPushRight(x+1, y, visitedBoardElementsYou);
-    this->tryMoveRight(x+1, y, visitedBoardElementsYou);
-    if (not this->isCellFree(x+1, y))
-        return;
-    for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
-    {
-        if (this->boardElementHasProperty(*(cell[i]), RuleProperty::YOU))
-        {
-            board.setNewPosition(cell[i], x+1, y);
+            board.setNewPosition(cell[i], x+dx, y+dy);
             visitedBoardElementsYou.insert(cell[i]);
         }
     }

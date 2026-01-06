@@ -33,6 +33,14 @@ class Model: public Subject
 
         explicit Model(int level);
 
+        /**
+         * @brief Récupère tous les éléments du board qui ont la propriété property.
+         *
+         * @param property
+         *        La propriété en question.
+         */
+        std::vector<BoardElement*> operator[](RuleProperty property) const;
+
         bool checkWin() const;
 
         // supprime les éléments qui doivent disappear
@@ -41,13 +49,14 @@ class Model: public Subject
         bool undo();
         bool redo();
 
-    /**
+        /**
          * @brief Essaie de déplacer vers  les éléments du board constituant le joueur.
          */
         void moveUp();
         void moveDown();
         void moveLeft();
         void moveRight();
+        void move(Direction direction);
 
         /**
          * @brief Table d'association entre le boardElementType d'un BoardElement appartenant à
@@ -98,14 +107,6 @@ class Model: public Subject
         bool boardElementHasProperty(BoardElement& boardElement, RuleProperty ruleProperty) const;
 
         /**
-         * @brief Récupère tous les éléments du board qui ont la propriété ruleProperty.
-         *
-         * @param ruleProperty
-         *        La propriété en question.
-         */
-        std::vector<BoardElement*> getBoardElements(RuleProperty ruleProperty);
-
-        /**
          * @brief Met à jour la règle codée horizontalement et commençant sur la case (x, y), si elle existe.
          *
          * @param x
@@ -145,14 +146,7 @@ class Model: public Subject
          *        se déplacer vers le haut pour pouvoir pousser vers le haut les
          *        éléments de la case (x, y).
          */
-        void tryPushUp(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou);
-
-        void tryPushDown(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou);
-
-        void tryPushLeft(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou);
-
-        void tryPushRight(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou);
-
+        void tryPush(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou, Direction direction);
 
         /**
          * @brief Essaie de déplacer vers le haut les éléments de la case (x, y) constituant le joueur.
@@ -166,13 +160,8 @@ class Model: public Subject
          *        se déplacer vers le haut pour pouvoir déplacer vers le haut les
          *        éléments de la case (x, y) constituant le joueur.
          */
-        void tryMoveUp(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou);
 
-        void tryMoveDown(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou);
-
-        void tryMoveLeft(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou);
-
-        void tryMoveRight(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou);
+        void tryMove(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou, Direction direction);
 
         Board board;
 

@@ -9,9 +9,7 @@ void Controller::handleEvent()
     sf::Event event;
     while (window.pollEvent(event))
     {
-        if (event.type == sf::Event::Closed)
-            this->notifyObservers(Quit{});
-        else if (event.type == sf::Event::KeyPressed)
+        if (event.type == sf::Event::KeyPressed)
         {
             if (event.key.code == sf::Keyboard::Left)
                 model.moveLeft();
@@ -25,6 +23,8 @@ void Controller::handleEvent()
                 model.undo();
             else if (event.key.code == sf::Keyboard::N)
                 model.redo();
+            else if (event.key.code == sf::Keyboard::Q)
+                this->notifyObservers(Quit{});
         }
     }
 }

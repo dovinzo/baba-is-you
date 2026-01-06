@@ -9,9 +9,7 @@ void MenuController::handleEvent()
     sf::Event event;
     while (window.pollEvent(event))
     {
-        if (event.type == sf::Event::Closed)
-            quitRequested = true;
-        else if (event.type == sf::Event::KeyPressed)
+        if (event.type == sf::Event::KeyPressed)
         {
             if (event.key.code == sf::Keyboard::Up)
             {
@@ -28,6 +26,8 @@ void MenuController::handleEvent()
                 levelRequested = true;
                 whichLevelRequested = MenuController::whichLevel(menuModel.getMenuItem());
             }
+            else if (event.key.code == sf::Keyboard::Q)
+                quitRequested = true;
         }
     }
 }

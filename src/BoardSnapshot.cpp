@@ -13,7 +13,7 @@ BoardSnapshot::BoardSnapshot(const Board& board): width{board.getWidth()}, heigh
     {
         for (int y = 0 ; y < height ; y++)
         {
-            cell = board.getCell(x, y);
+            cell = board(x, y);
             for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
             {
                 grid[x][y].push_back(new BoardElement{cell[i]->getType(), x, y});
