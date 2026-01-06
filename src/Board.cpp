@@ -1,6 +1,6 @@
 #include "Board.hpp"
 
-Board::Board(int level): width{}, height{}, grid{}
+Board::Board(int level): grid{}, width{}, height{}
 {
     std::string filePath = "assets/level" + std::to_string(level) + ".txt";
     std::string line;

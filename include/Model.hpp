@@ -11,6 +11,8 @@
 #include <vector>
 #include <set>
 
+/* Le Model gère toute la logique du jeu. Il reçoit du Controller les inputs de l'utilisateur. 
+C'est la "tête pensante" qui connait temps les règles que l'état du board à tout instant.  */
 class Controller;
 
 class Model: public Subject
@@ -30,144 +32,54 @@ class Model: public Subject
         friend class App;
 
     private:
+        Board board;
+        Rules rules;
+        BoardHistory boardHistory;
 
-        explicit Model(int level);
+        explicit Model(int level); // uniquement possible par l'App
 
-        /**
-         * @brief Récupère tous les éléments du board qui ont la propriété property.
-         *
-         * @param property
-         *        La propriété en question.
-         */
+        // renvoie tous les BoardElement possédant une RuleProperty donnée au vu des Rules courantes
         std::vector<BoardElement*> operator[](RuleProperty property) const;
 
+        // vérifie si les conditions de victoire sont remplies par un parcours du Board au vu des Rules
         bool checkWin() const;
-
-        // supprime les éléments qui doivent disappear
         void sink() ;
 
+        // gestion de l'historique des déplacements pour undo/redo
         bool undo();
         bool redo();
 
-        /**
-         * @brief Essaie de déplacer vers  les éléments du board constituant le joueur.
-         */
+        // tentative de déplacement dans une des 4 directions
         void moveUp();
         void moveDown();
         void moveLeft();
         void moveRight();
         void move(Direction direction);
 
-        /**
-         * @brief Table d'association entre le boardElementType d'un BoardElement appartenant à
-         *        la catégorie BoardElementCategory::OBJECT et le RuleSubject associé :
-         *            BoardElementType::BABA -> RuleSubject::BABA
-         *            BoardElementType::WALL -> RuleSubject::WALL
-         *            BoardElementType::FLAG -> RuleSubject::FLAG
-         *            BoardElementType::ROCK -> RuleSubject::ROCK
-         *
-         * @param boardElementType
-         *        Le BoardElementType d'un BoardElement appartenant à
-         *        la catégorie BoardElementCategory::OBJECT.
-         */
+        // Traductions (cf. Rules.hpp et Enums.hpp)
+        // Table de traduction entre le boardElementType d'un BoardElement et ObjectToRuleSubject
+        // e.g BoardElementType::ROCK -> RuleSubject::ROCK 
         static RuleSubject ObjectToRuleSubject(BoardElementType boardElementType);
 
-        /**
-         * @brief Table d'association entre le boardElementType d'un BoardElement appartenant à
-         *        la catégorie BoardElementCategory::TEXT_PROPERTY et le RuleProperty associé :
-         *            BoardElementType::TEXT_BABA -> RuleProperty::BABA
-         *            BoardElementType::TEXT_WALL -> RuleProperty::WALL
-         *            BoardElementType::TEXT_FLAG -> RuleProperty::FLAG
-         *            BoardElementType::TEXT_ROCK -> RuleProperty::ROCK
-         *            BoardElementType::TEXT_PUSH -> RuleProperty::PUSH
-         *            BoardElementType::TEXT_YOU -> RuleProperty::YOU
-         *            BoardElementType::TEXT_STOP -> RuleProperty::STOP
-         *            BoardElementType::TEXT_WIN -> RuleProperty::WIN
-         *
-         * @param boardElementType
-         *        Le BoardElementType d'un BoardElement appartenant à
-         *        la catégorie BoardElementCategory::TEXT_PROPERTY.
-         */
+        // Traduction : e.g BoardElementType::TEXT_WALL -> RuleProperty::WALL
         static RuleProperty TextPropertyToRuleProperty(BoardElementType boardElementType);
 
-        /**
-         * @brief Table d'association entre le boardElementType d'un BoardElement appartenant à
-         *        la catégorie BoardElementCategory::TEXT_OBJECT et le RuleSubject associé :
-         *            BoardElementType::TEXT_BABA -> RuleSubject::BABA
-         *            BoardElementType::TEXT_WALL -> RuleSubject::WALL
-         *            BoardElementType::TEXT_FLAG -> RuleSubject::FLAG
-         *            BoardElementType::TEXT_ROCK -> RuleSubject::ROCK
-         *
-         * @param boardElementType
-         *        Le BoardElementType d'un BoardElement appartenant à
-         *        la catégorie BoardElementCategory::TEXT_OBJECT.
-         */
+        // E.g BoardElementType::TEXT_BABA -> RuleSubject::BABA
         static RuleSubject TextObjectToRuleSubject(BoardElementType boardElementType);
 
+        // vérifie si un BoardElement possède une RuleProperty donnée au vu des Rules courantes
         bool boardElementHasProperty(BoardElement& boardElement, RuleProperty ruleProperty) const;
 
-        /**
-         * @brief Met à jour la règle codée horizontalement et commençant sur la case (x, y), si elle existe.
-         *
-         * @param x
-         *        Entier compris entre 0 et board.getWidth() inclus.
-         * @param y
-         *        Entier compris entre 0 et board.getHeight() inclus.
-         */
-
-
-        /**
-         * @brief Renvoie vrai si la case (x, y) est libre, sinon faux.
-         *        Une case est libre si :
-         *            - tous les éléments se trouvant sur cette case ne possèdent pas la propriété STOP ;
-         *            - tous les éléments se trouvant sur cette case ne possèdent pas la propriété PUSH.
-         *
-         * @param x
-         *        Entier compris entre 0 et board.getWidth() inclus.
-         * @param y
-         *        Entier compris entre 0 et board.getHeight() inclus.
-         */
         bool isCellFree(int x, int y) const;
 
-        
+        // met à jour les règles en fonction des TextElements présents sur le Board
         void updateRules();
         void updateHorizontalRuleFromCell(int x, int y);
         void updateVerticalRuleFromCell(int x, int y);
 
-        /**
-         * @brief Essaie de pousser vers le haut les éléments de la case (x, y).
-         *
-         * @param x
-         *        Entier compris entre 0 et board.getWidth() inclus.
-         * @param y
-         *        Entier compris entre 0 et board.getHeight() inclus.
-         * @param visitedBoardElementsYou
-         *        On y ajoutera les éléments constituant le joueur qui ont dû
-         *        se déplacer vers le haut pour pouvoir pousser vers le haut les
-         *        éléments de la case (x, y).
-         */
         void tryPush(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou, Direction direction);
 
-        /**
-         * @brief Essaie de déplacer vers le haut les éléments de la case (x, y) constituant le joueur.
-         *
-         * @param x
-         *        Entier compris entre 0 et board.getWidth() inclus.
-         * @param y
-         *        Entier compris entre 0 et board.getHeight() inclus.
-         * @param visitedBoardElementsYou
-         *        On y ajoutera les éléments constituant le joueur qui ont dû
-         *        se déplacer vers le haut pour pouvoir déplacer vers le haut les
-         *        éléments de la case (x, y) constituant le joueur.
-         */
-
         void tryMove(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou, Direction direction);
-
-        Board board;
-
-        Rules rules;
-
-        BoardHistory boardHistory;
 };
 
 #endif

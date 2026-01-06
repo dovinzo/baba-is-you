@@ -1,6 +1,8 @@
 #ifndef ENUMS_HPP
 #define ENUMS_HPP
 
+/* Typage fort des différents éléments du jeu. */
+
 enum class BoardElementType
 {
     BABA,
@@ -19,10 +21,14 @@ enum class BoardElementType
     TEXT_WIN,
     TEXT_WATER,
     TEXT_SINK,
-    INVALID
+    INVALID // permet de gérer les exceptions. 
 };
 
-enum class BoardElementCategory
+// Une rule est un élément de type 'Object' + IS + 'Property'.
+/* Si cette implémentation à le mérite d'éviter de gérer tous les cas possibles en
+imposant une grammaire claire, elle manque aussi de développement possible. 
+Gérer les Baba is Wall, par exemple, sera compliqué.  */ 
+enum class BoardElementCategory 
 {
     OBJECT,
     TEXT_OBJECT,
@@ -68,6 +74,8 @@ enum class AppState
     QUIT
 };
 
+// Une autre implémentation, qui viendrait compter le nombre de fichier .txt dans les src
+// serait préférable. 
 enum class MenuItem
 {
     LEVEL1,
