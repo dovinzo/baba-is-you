@@ -49,11 +49,11 @@ class Model: public Subject
         bool undo();
         bool redo();
 
+        void tryPush(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou, Direction direction);
+
+        void tryMove(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou, Direction direction);
+
         // tentative de déplacement dans une des 4 directions
-        void moveUp();
-        void moveDown();
-        void moveLeft();
-        void moveRight();
         void move(Direction direction);
 
         // Traductions (cf. Rules.hpp et Enums.hpp)
@@ -77,9 +77,7 @@ class Model: public Subject
         void updateHorizontalRuleFromCell(int x, int y);
         void updateVerticalRuleFromCell(int x, int y);
 
-        void tryPush(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou, Direction direction);
-
-        void tryMove(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou, Direction direction);
+        
 };
 
 #endif

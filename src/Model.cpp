@@ -28,26 +28,6 @@ std::vector<BoardElement*> Model::operator[](RuleProperty property) const
     return elements;
 }
 
-void Model::moveUp()
-{
-    this->move(Direction::UP);
-}
-
-void Model::moveDown()
-{
-    this->move(Direction::DOWN);
-}
-
-void Model::moveLeft()
-{
-    this->move(Direction::LEFT);
-}
-
-void Model::moveRight()
-{
-    this->move(Direction::RIGHT);
-}
-
 void Model::move(Direction direction)
 {
     int x, y;

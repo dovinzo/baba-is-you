@@ -6,6 +6,7 @@
 #include "View.hpp"
 #include "Quit.hpp"
 #include "Subject.hpp"
+#include "Enums.hpp"
 
 /* Controller d'un niveau, Gère le lien entre le modèle et la vu. Rôle assez minime dans notre
 implémentation, car il se contente de gérer les inputs de l'utilisateurs. */
