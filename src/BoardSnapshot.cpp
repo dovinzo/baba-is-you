@@ -1,5 +1,4 @@
 #include "BoardSnapshot.hpp"
-#include "Board.hpp"
 #include <vector>
 
 BoardSnapshot::BoardSnapshot(const Board& board): width{board.getWidth()}, height{board.getHeight()}, grid{nullptr}

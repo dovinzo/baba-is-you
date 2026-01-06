@@ -1,14 +1,4 @@
 #include "Board.hpp"
-#include "Enums.hpp"
-#include "BoardElement.hpp"
-#include "BoardSnapshot.hpp"
-#include <fstream> // pour std::ifstream
-#include <string> // pour std::string
-#include <sstream> // pour std::istringstream
-#include <iostream>
-#include <cmath>
-
-
 
 Board::Board(int level): width{}, height{}, grid{}
 {

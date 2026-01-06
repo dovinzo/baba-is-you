@@ -1,6 +1,7 @@
 #ifndef APP_HPP
 #define APP_HPP
 
+
 #include "MenuModel.hpp"
 #include "MenuView.hpp"
 #include "MenuController.hpp"
@@ -9,6 +10,16 @@
 #include "Controller.hpp"
 #include "Observer.hpp"
 #include "Notification.hpp"
+#include "Model.hpp"
+#include "View.hpp"
+#include "Controller.hpp"
+#include "MenuModel.hpp"
+#include "MenuView.hpp"
+#include "MenuController.hpp"
+#include "Observer.hpp"
+#include "Notification.hpp"
+#include "Victory.hpp"
+#include "Quit.hpp"
 #include <SFML/Graphics.hpp>
 
 class App: public Observer

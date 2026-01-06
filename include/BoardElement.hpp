@@ -2,7 +2,6 @@
 #define BOARDELEMENT_HPP
 
 #include "Enums.hpp"
-#include "Rules.hpp"
 
 class Board;
 class BoardSnapshot;

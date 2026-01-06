@@ -1,9 +1,4 @@
-#include <SFML/Graphics.hpp>
-#include "Model.hpp"
-#include "View.hpp"
 #include "Controller.hpp"
-#include "Subject.hpp"
-#include "Quit.hpp"
 
 Controller::Controller(sf::RenderWindow& window, Model& model): window{window}, model{model}
 {

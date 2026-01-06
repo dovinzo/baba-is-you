@@ -1,7 +1,4 @@
 #include "BoardElement.hpp"
-#include "Enums.hpp"
-#include "Rules.hpp"
-#include "Model.hpp"
 
 BoardElement::BoardElement(BoardElementType type, int x, int y): type{type}, x{x}, y{y}
 {

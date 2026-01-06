@@ -7,6 +7,7 @@
 #include "BoardElement.hpp"
 #include "BoardHistory.hpp"
 #include "Subject.hpp"
+#include "Victory.hpp"
 #include <vector>
 #include <set>
 

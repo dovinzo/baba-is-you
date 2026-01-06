@@ -1,9 +1,4 @@
 #include "Model.hpp"
-#include "Enums.hpp"
-#include "BoardElement.hpp"
-#include "Victory.hpp"
-#include <vector>
-#include <algorithm>
 
 Model::Model(int level): board{level}, rules{}, boardHistory{}
 {

@@ -1,8 +1,4 @@
-#include <SFML/Graphics.hpp>
-#include "MenuModel.hpp"
-#include "MenuView.hpp"
 #include "MenuController.hpp"
-#include "Enums.hpp"
 
 MenuController::MenuController(sf::RenderWindow& window, MenuModel& menuModel, MenuView& menuView): window{window}, menuModel{menuModel}, menuView{menuView}, levelRequested{false}, whichLevelRequested{}, quitRequested{false}
 {

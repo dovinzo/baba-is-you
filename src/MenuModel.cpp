@@ -1,5 +1,4 @@
 #include "MenuModel.hpp"
-#include "Enums.hpp"
 
 MenuModel::MenuModel(): item{MenuItem::LEVEL1}
 {

@@ -3,8 +3,14 @@
 
 #include "Enums.hpp"
 #include "BoardElement.hpp"
+#include "BoardSnapshot.hpp"
+
 #include <string>
 #include <vector>
+#include <fstream> 
+#include <sstream> 
+#include <iostream>
+#include <cmath>
 
 class BoardSnapshot;
 class Model;

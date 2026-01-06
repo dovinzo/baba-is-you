@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include "Model.hpp"
 #include "View.hpp"
+#include "Quit.hpp"
 #include "Subject.hpp"
 
 class App;

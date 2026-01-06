@@ -1,5 +1,4 @@
 #include "Rules.hpp"
-#include "Enums.hpp"
 
 RuleKey::RuleKey(RuleSubject subject, RuleProperty property): subject{subject}, property{property}
 {

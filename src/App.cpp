@@ -1,16 +1,5 @@
 #include "App.hpp"
-#include "Enums.hpp"
-#include "Model.hpp"
-#include "View.hpp"
-#include "Controller.hpp"
-#include "MenuModel.hpp"
-#include "MenuView.hpp"
-#include "MenuController.hpp"
-#include "Observer.hpp"
-#include "Notification.hpp"
-#include "Victory.hpp"
-#include "Quit.hpp"
-#include <SFML/Graphics.hpp>
+
 
 App::App(): window{nullptr}, appState{AppState::MENU}, menuModel{nullptr}, menuView{nullptr}, menuController{nullptr}, levelModel{nullptr}, levelView{nullptr}, levelController{nullptr}
 {

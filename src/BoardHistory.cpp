@@ -1,6 +1,4 @@
 #include "BoardHistory.hpp"
-#include "Board.hpp"
-#include "BoardSnapshot.hpp"
 
 BoardHistory::~BoardHistory()
 {
