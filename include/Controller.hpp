@@ -7,6 +7,9 @@
 #include "Quit.hpp"
 #include "Subject.hpp"
 
+/* Controller d'un niveau, Gère le lien entre le modèle et la vu. Rôle assez minime dans notre
+implémentation, car il se contente de gérer les inputs de l'utilisateurs. */
+
 class App;
 
 class Controller: public Subject
@@ -16,9 +19,11 @@ class Controller: public Subject
 
         friend class App;
     private:
-        Controller(sf::RenderWindow& window, Model& model);
-        void handleEvent();
-        sf::RenderWindow& window;
+        Controller(sf::RenderWindow& window, Model& model); // uniquement possible par l'App
+        void handleEvent(); // gère les inputs
+
+        // envoie les input au modèle
+        sf::RenderWindow& window; 
         Model& model;
 };
 
