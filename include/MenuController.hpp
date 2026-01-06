@@ -5,24 +5,30 @@
 #include "MenuModel.hpp"
 #include "MenuView.hpp"
 
+class App; 
+
 class MenuController
 {
+    friend class App;
     public:
         MenuController() = delete;
-        MenuController(sf::RenderWindow& window, MenuModel& menuModel, MenuView& menuView);
-        void handleEvent();
         bool getLevelRequested() const;
         int getWhichLevelRequested() const;
         bool getQuitRequested() const;
+        
     private:
+        MenuController(sf::RenderWindow& window, MenuModel& menuModel, MenuView& menuView);
+        void handleEvent();
+        
         static int whichLevel(MenuItem menuItem);
-    private:
         sf::RenderWindow& window;
         MenuModel& menuModel;
         MenuView& menuView;
         bool levelRequested;
         int whichLevelRequested;
         bool quitRequested;
+
+
 };
 
 #endif

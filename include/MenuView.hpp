@@ -4,14 +4,20 @@
 #include <SFML/Graphics.hpp>
 #include "MenuModel.hpp"
 
+class App;
+class MenuController;
+
 class MenuView
 {
+    friend class App;
+    friend class MenuController;
     public:
         MenuView() = delete;
+        
+    private:
         MenuView(sf::RenderWindow& window, MenuModel& menuModel);
         void draw();
         void update();
-    private:
         void reset();
         sf::Font font;
         sf::Text level1;

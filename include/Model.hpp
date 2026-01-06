@@ -31,7 +31,7 @@ class Model: public Subject
 
     private:
 
-        Model(int level);
+        explicit Model(int level);
 
         bool checkWin() const;
 

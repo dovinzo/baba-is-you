@@ -31,7 +31,7 @@ class Board
 
     private:
     
-        Board(int level);
+        explicit Board(int level);
         Board& operator=(const BoardSnapshot& boardSnapshot);
         void spawnBoardElement(BoardElementType boardElementType, int x, int y);
         void createEmptyGrid(int width, int height);

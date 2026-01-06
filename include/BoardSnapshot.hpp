@@ -10,12 +10,11 @@ class BoardSnapshot
     friend class Board;
     public:
         BoardSnapshot() = delete;
-        BoardSnapshot(const Board& board);
         BoardSnapshot& operator=(const BoardSnapshot& other) = delete;
-        //BoardSnapshot(const BoardSnapshot& other) = delete;
-        //BoardSnapshot(const BoardSnapshot &other);
+        BoardSnapshot(const BoardSnapshot& other) = delete;
         ~BoardSnapshot();
     private:
+        explicit BoardSnapshot(const Board& board);
         int width;
         int height;
         std::vector<BoardElement*>** grid;

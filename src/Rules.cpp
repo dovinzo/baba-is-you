@@ -1,15 +1,15 @@
 #include "Rules.hpp"
 
-RuleKey::RuleKey(RuleSubject subject, RuleProperty property): subject{subject}, property{property}
+Rules::RuleKey::RuleKey(RuleSubject subject, RuleProperty property): subject{subject}, property{property}
 {
 }
 
-bool RuleKey::operator==(const RuleKey& other) const
+bool Rules::RuleKey::operator==(const RuleKey& other) const
 {
     return (this->subject == other.subject) and (this->property == other.property);
 }
 
-bool RuleKey::operator<(const RuleKey& other) const
+bool Rules::RuleKey::operator<(const RuleKey& other) const
 {
     return (subject < other.subject || (subject == other.subject && property < other.property) );
 }

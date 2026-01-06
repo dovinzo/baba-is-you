@@ -5,26 +5,6 @@
 #include <map>
 #include <vector>
 
-class Rules; 
-
-class RuleKey
-{
-    friend class Rules;
-
-    public:
-
-        RuleKey() = delete;
-    
-        bool operator==(const RuleKey& other) const;
-        bool operator<(const RuleKey& other) const;
-
-    private:
-        RuleKey(RuleSubject subject, RuleProperty property);
-        RuleSubject subject;
-        RuleProperty property;
-        
-};
-
 class Rules
 {
 
@@ -34,6 +14,23 @@ class Rules
         bool haveRule(RuleSubject ruleSubject, RuleProperty ruleProperty) const;
 
     private:
+        class RuleKey
+        {
+            friend class Rules;
+
+            public:
+
+                RuleKey() = delete;
+            
+                bool operator==(const RuleKey& other) const;
+                bool operator<(const RuleKey& other) const;
+
+            private:
+                RuleKey(RuleSubject subject, RuleProperty property);
+                RuleSubject subject;
+                RuleProperty property;
+                
+        };
 
         Rules();
         void setRule(RuleSubject ruleSubject, RuleProperty ruleProperty);
