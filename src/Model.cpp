@@ -164,11 +164,10 @@ void Model::sink()  {
         {
             cell = board.getCell(x, y);
             bool killCell = false;
-            if (cell.size() == 0)
-                if (this->boardElementHasProperty(*(cell[0]), RuleProperty::SINK) && this->boardElementHasProperty(*(cell[0]), RuleProperty::YOU)) 
-                    killCell = true;
+            if (cell.size() == 1 && this->boardElementHasProperty(*(cell[0]), RuleProperty::SINK) && this->boardElementHasProperty(*(cell[0]), RuleProperty::YOU)) 
+                killCell = true;
 
-            if (cell.size() > 1) {
+            else if (cell.size() > 1) {
                 for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
                 {
                     if (this->boardElementHasProperty(*(cell[i]), RuleProperty::SINK))
@@ -180,10 +179,9 @@ void Model::sink()  {
             }
            
             if (killCell) {
-                for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
-                {
+                
                     board.killCell(x,y); 
-                }
+                
             }
         }
     }

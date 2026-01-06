@@ -13,10 +13,10 @@ class Controller: public Subject
 {
     public:
         Controller() = delete;
-        Controller(sf::RenderWindow& window, Model& model);
 
         friend class App;
     private:
+        Controller(sf::RenderWindow& window, Model& model);
         void handleEvent();
         sf::RenderWindow& window;
         Model& model;
