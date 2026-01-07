@@ -14,7 +14,6 @@ class Rules
     friend class Model;
     public : 
         // vérifie si une règle donnée est active
-        
         bool haveRule(RuleSubject ruleSubject, RuleProperty ruleProperty) const;
 
     private:
