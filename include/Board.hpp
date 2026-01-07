@@ -47,7 +47,8 @@ class Board
         explicit Board(int level); // explicit pour éviter les conversions implicites. usage : level1.txt
         
         Board& operator=(const BoardSnapshot& boardSnapshot); // surcharge pour restaurer un snapshot
-        std::vector<BoardElement*> operator()(int x, int y) const;
+        std::vector<BoardElement*>& operator()(int x, int y);
+        const std::vector<BoardElement*>& operator()(int x, int y) const;
 
         void spawnBoardElement(BoardElementType boardElementType, int x, int y);
         void createEmptyGrid(int width, int height); // utilisé lors de la création du board

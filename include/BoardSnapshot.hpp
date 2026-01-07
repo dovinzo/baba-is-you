@@ -22,6 +22,8 @@ class BoardSnapshot
     private:
         // il s'agit seulement d'une photographie : pas de getter, etc. 
         explicit BoardSnapshot(const Board& board);
+        std::vector<BoardElement*>& operator()(int x, int y);
+        const std::vector<BoardElement*>& operator()(int x, int y) const;
         int width;
         int height;
         std::vector<BoardElement*>** grid;

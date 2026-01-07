@@ -1,6 +1,8 @@
 #include "BoardSnapshot.hpp"
 #include <vector>
 
+
+
 BoardSnapshot::BoardSnapshot(const Board& board): width{board.getWidth()}, height{board.getHeight()}, grid{nullptr}
 {
     std::vector<BoardElement*> cell;
@@ -16,10 +18,28 @@ BoardSnapshot::BoardSnapshot(const Board& board): width{board.getWidth()}, heigh
             cell = board(x, y);
             for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
             {
-                grid[x][y].push_back(new BoardElement{cell[i]->getType(), x, y});
+                (*this)(x,y).push_back(new BoardElement{cell.at(i)->getType(), x, y});
             }
         }
     }
+}
+
+std::vector<BoardElement*>& BoardSnapshot::operator()(int x, int y)
+{
+    if (x < 0 || x >= width || y < 0 || y >= height)
+    {
+        throw std::out_of_range{"BoardSnapshot::operator(): coordonnées (" + std::to_string(x) + ", " + std::to_string(y) + ") hors de la grille."};
+    }
+    return grid[x][y];
+}
+
+const std::vector<BoardElement*>& BoardSnapshot::operator()(int x, int y) const
+{
+    if (x < 0 || x >= width || y < 0 || y >= height)
+    {
+        throw std::out_of_range{"BoardSnapshot::operator(): coordonnées (" + std::to_string(x) + ", " + std::to_string(y) + ") hors de la grille."};
+    }
+    return grid[x][y];
 }
 
 BoardSnapshot::~BoardSnapshot()
@@ -28,10 +48,10 @@ BoardSnapshot::~BoardSnapshot()
     {
         for (int y = 0 ; y < height ; y++)
         {
-           while (not grid[x][y].empty())
+           while (not (*this)(x,y).empty())
            {
-               delete grid[x][y].back();
-               grid[x][y].pop_back();
+               delete (*this)(x,y).back();
+               (*this)(x,y).pop_back();
            }
         }
         delete[] grid[x];

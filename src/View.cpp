@@ -30,7 +30,7 @@ void View::draw()
             cell = model.getBoardCell(x, y);
             for (int i = 0 ; i < static_cast<int>(cell.size()) ; i++)
             {
-                this->updateSpriteFromBoardElement(sprite, *cell[i]);
+                this->updateSpriteFromBoardElement(sprite, *cell.at(i));
                 window.draw(sprite);
             }
         }

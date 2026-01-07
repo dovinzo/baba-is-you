@@ -22,7 +22,7 @@ Rules::Rules(): rules{}
     {
         for(int j = 0 ; j < static_cast<int>(ruleProperties.size()) ; j++)
         {
-            RuleKey ruleKey{ruleSubjects[i], ruleProperties[j]};
+            RuleKey ruleKey{ruleSubjects.at(i), ruleProperties.at(j)};
             rules[ruleKey] = false;
         }
     }
@@ -69,9 +69,9 @@ std::vector<RuleSubject> Rules::getRuleSubjects(RuleProperty ruleProperty)
     std::vector<RuleSubject> ruleSubjects{};
     for (int i = 0 ; i < static_cast<int>(allRuleSubjects.size()) ; i++)
     {
-        if (this->haveRule(allRuleSubjects[i], ruleProperty))
+        if (this->haveRule(allRuleSubjects.at(i), ruleProperty))
         {
-            ruleSubjects.push_back(allRuleSubjects[i]);
+            ruleSubjects.push_back(allRuleSubjects.at(i));
         }
     }
     return ruleSubjects;
@@ -91,7 +91,7 @@ void Rules::clearRules()
     {
         for(int j = 0 ; j < static_cast<int>(ruleProperties.size()) ; j++)
         {
-            RuleKey ruleKey {ruleSubjects[i], ruleProperties[j]};
+            RuleKey ruleKey {ruleSubjects.at(i), ruleProperties.at(j)};
             rules[ruleKey] = false;
         }
     }

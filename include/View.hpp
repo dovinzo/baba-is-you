@@ -11,8 +11,12 @@
  * @class View
  * @brief Représente la vue du jeu, dans le design pattern MVC.
  */
+class App;
+
 class View
 {
+
+    friend class App;
     public:
 
         /**
@@ -26,7 +30,7 @@ class View
          *        Fenêtre du jeu, permettant de récupérer
          *        sa taille.
          */
-        View(Model& model, sf::RenderWindow& window);
+        
 
         ~View();
 
@@ -39,9 +43,13 @@ class View
          *        Modèle du jeu permettant de parcourir
          *        les sprites dans le bon ordre pour la superposition.
          */
-        void draw();
+        
 
     private:
+
+        View(Model& model, sf::RenderWindow& window);
+
+        void draw();
 
         void createTextures();
 
@@ -52,8 +60,6 @@ class View
         int convertXGridToXScreen(int xGrid);
 
         int convertYGridToYScreen(int yGrid);
-
-    private:
 
         /**
          * @brief Dictionnaire entre le type des éléments du board

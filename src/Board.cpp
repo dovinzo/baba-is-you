@@ -85,7 +85,7 @@ void Board::setNewPosition(BoardElement* boardElement, int xNew, int yNew)
     boardElement->setPositionY(yNew);
     for (int i = 0 ; i < static_cast<int>(grid[xOld][yOld].size()) ; i++)
     {
-        if (grid[xOld][yOld][i] == boardElement)
+        if (grid[xOld][yOld].at(i) == boardElement)
         {
             grid[xOld][yOld].erase(grid[xOld][yOld].begin() + i);
             grid[xNew][yNew].push_back(boardElement);
@@ -105,14 +105,14 @@ Board& Board::operator=(const BoardSnapshot& boardSnapshot)
     {
         for (int y = 0 ; y < height ; y++)
         {
-            while (not grid[x][y].empty())
+            while (not (*this)(x,y).empty())
             {
-                delete grid[x][y].back();
-                grid[x][y].pop_back();
+                delete (*this)(x,y).back();
+                (*this)(x,y).pop_back();
            }
-           for (int i = 0 ; i < static_cast<int>(boardSnapshot.grid[x][y].size()) ; i++)
+           for (int i = 0 ; i < static_cast<int>(boardSnapshot(x,y).size()) ; i++)
            {
-               grid[x][y].push_back(new BoardElement{boardSnapshot.grid[x][y][i]->getType(), x, y});
+               (*this)(x,y).push_back(new BoardElement{boardSnapshot(x,y)[i]->getType(), x, y});
            }
         }
     }
@@ -121,19 +121,32 @@ Board& Board::operator=(const BoardSnapshot& boardSnapshot)
 
 void Board::spawnBoardElement(BoardElementType boardElementType, int x, int y)
 {
-    grid[x][y].push_back(new BoardElement{boardElementType, x, y});
+    (*this)(x,y).push_back(new BoardElement{boardElementType, x, y});
 }
 
-std::vector<BoardElement*> Board::operator()(int x, int y) const
+std::vector<BoardElement*>& Board::operator()(int x, int y)
 {
+    if (x < 0 || x >= width || y < 0 || y >= height)
+    {
+        throw std::out_of_range{"Board::operator(): coordonnées (" + std::to_string(x) + ", " + std::to_string(y) + ") hors de la grille."};
+    }
+    return grid[x][y];
+}
+
+const std::vector<BoardElement*>& Board::operator()(int x, int y) const
+{
+    if (x < 0 || x >= width || y < 0 || y >= height)
+    {
+        throw std::out_of_range{"Board::operator(): coordonnées (" + std::to_string(x) + ", " + std::to_string(y) + ") hors de la grille."};
+    }
     return grid[x][y];
 }
 
 void Board::killCell(int x, int y)
 {
-    while (not grid[x][y].empty())
+    while (not (*this)(x,y).empty())
     {
-        delete grid[x][y].back();
-        grid[x][y].pop_back();
+        delete (*this)(x,y).back();
+        (*this)(x,y).pop_back();
     }
 } 
