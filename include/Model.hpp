@@ -14,13 +14,13 @@
 /* Le Model gère toute la logique du jeu. Il reçoit du Controller les inputs de l'utilisateur. 
 C'est la "tête pensante" qui connait temps les règles que l'état du board à tout instant.  */
 class Controller;
+class App;
 
 class Model: public Subject
 {
     public:
 
         Model() = delete;
-        ~Model() = default;
         Model& operator=(const Model& model) = delete;
         Model(const Model& model) = delete;
 
@@ -32,6 +32,7 @@ class Model: public Subject
         friend class App;
 
     private:
+        virtual ~Model() = default;
         Board board;
         Rules rules;
         BoardHistory boardHistory;

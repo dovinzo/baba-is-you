@@ -19,35 +19,15 @@ class View
     friend class App;
     public:
 
-        /**
-         * @brief Construit un objet View, initialisé avec les données
-         *        du modèle au début du jeu et de la taille de la fenêtre.
-         *
-         * @param model
-         *        Modèle du jeu au début de la partie
-         *        permettant d'initialiser la vue.
-         * @param window
-         *        Fenêtre du jeu, permettant de récupérer
-         *        sa taille.
-         */
-        
-
-        ~View();
-
-        /**
-         * @brief Dessine à l'écran (i.e. sur la fenêtre du jeu) la vue.
-         *
-         * @param window
-         *        Fenêtre du jeu.
-         * @param model
-         *        Modèle du jeu permettant de parcourir
-         *        les sprites dans le bon ordre pour la superposition.
-         */
+        View() = delete;
+        View(const View& view) = delete;
+        View& operator=(const View& view) = delete;
         
 
     private:
 
         View(Model& model, sf::RenderWindow& window);
+        virtual ~View();
 
         void draw();
 

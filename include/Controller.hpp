@@ -20,6 +20,8 @@ class Controller: public Subject
 
         friend class App;
     private:
+
+        virtual ~Controller() = default;
         Controller(sf::RenderWindow& window, Model& model); // uniquement possible par l'App
         void handleEvent(); // gère les inputs
 

@@ -17,10 +17,11 @@ class BoardHistory
     public : 
         BoardHistory(const BoardHistory& other) = delete;
         BoardHistory& operator=(const BoardHistory& other) = delete;
-        ~BoardHistory();
+        
         
     private:
         BoardHistory() = default;
+        virtual ~BoardHistory();
         void push(const BoardSnapshot* boardSnapshot);
 
         // lors d'un undo, on dépile, et on restaure le dernier élément de la pile. 

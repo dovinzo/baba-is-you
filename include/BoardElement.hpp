@@ -18,8 +18,9 @@ class BoardElement
 
         BoardElement() = delete;
         BoardElement(const BoardElement& boardElement) = delete;
-        ~BoardElement() = default;
         BoardElement& operator=(const BoardElement& boardElement) = delete;
+
+        
 
         BoardElementCategory getCategory() const;
         BoardElementType getType() const;
@@ -31,10 +32,12 @@ class BoardElement
         friend class BoardSnapshot;
     private:
         BoardElementType type;
+        
         int x;
         int y;
 
         BoardElement(BoardElementType type, int x, int y);
+        virtual ~BoardElement() = default;
         
         static BoardElementType intToBoardElementType(int typeCode); // convertisseur lors de la création du niveau à partir d'un fichier txt.
         void setPositionX(int x);

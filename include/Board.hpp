@@ -32,7 +32,7 @@ class Board
         // rule of three pour plus de sécurité
         Board() = delete;
         Board(const Board& board) = delete;
-        ~Board();
+        
 
         int getWidth() const;
         int getHeight() const;
@@ -45,9 +45,9 @@ class Board
 
     private:
         explicit Board(int level); // explicit pour éviter les conversions implicites. usage : level1.txt
+        virtual ~Board();
         
         Board& operator=(const BoardSnapshot& boardSnapshot); // surcharge pour restaurer un snapshot
-        std::vector<BoardElement*>& operator()(int x, int y);
         const std::vector<BoardElement*>& operator()(int x, int y) const;
 
         void spawnBoardElement(BoardElementType boardElementType, int x, int y);
