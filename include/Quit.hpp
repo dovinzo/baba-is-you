@@ -5,8 +5,8 @@
 
 class Quit : public Notification
 {
-    public:
-        Quit() = default;
+public:
+    Quit() = default;
 };
 
 #endif

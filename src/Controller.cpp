@@ -1,6 +1,6 @@
 #include "Controller.hpp"
 
-Controller::Controller(sf::RenderWindow& window, Model& model): window{window}, model{model}
+Controller::Controller(sf::RenderWindow &window, Model &model) : window{window}, model{model}
 {
 }
 
@@ -8,19 +8,18 @@ Direction sf_keyboard_to_direction(sf::Keyboard::Key direction)
 {
     switch (direction)
     {
-        case sf::Keyboard::Left:
-            return Direction::LEFT;
-        case sf::Keyboard::Right:
-            return Direction::RIGHT;
-        case sf::Keyboard::Up:
-            return Direction::UP;
-        case sf::Keyboard::Down:
-            return Direction::DOWN;
-        default:
-            throw std::invalid_argument("Invalid direction key");
+    case sf::Keyboard::Left:
+        return Direction::LEFT;
+    case sf::Keyboard::Right:
+        return Direction::RIGHT;
+    case sf::Keyboard::Up:
+        return Direction::UP;
+    case sf::Keyboard::Down:
+        return Direction::DOWN;
+    default:
+        throw std::invalid_argument("Invalid direction key");
     }
 }
-
 
 void Controller::handleEvent()
 {
@@ -40,4 +39,3 @@ void Controller::handleEvent()
         }
     }
 }
-

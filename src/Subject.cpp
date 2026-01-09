@@ -2,14 +2,14 @@
 #include "Subject.hpp"
 #include "Notification.hpp"
 
-void Subject::addObserver(Observer* observer)
+void Subject::addObserver(Observer *observer)
 {
     observers.push_back(observer);
 }
 
-void Subject::removeObserver(Observer* observer)
+void Subject::removeObserver(Observer *observer)
 {
-    for (int i = 0 ; i < static_cast<int>(observers.size()) ; i++)
+    for (int i = 0; i < static_cast<int>(observers.size()); i++)
     {
         if (observers.at(i) == observer)
         {
@@ -19,9 +19,9 @@ void Subject::removeObserver(Observer* observer)
     }
 }
 
-void Subject::notifyObservers(const Notification& notification)
+void Subject::notifyObservers(const Notification &notification)
 {
-    for (int i = 0 ; i < static_cast<int>(observers.size()) ; i++)
+    for (int i = 0; i < static_cast<int>(observers.size()); i++)
     {
         observers.at(i)->update(notification);
     }

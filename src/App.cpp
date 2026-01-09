@@ -1,15 +1,10 @@
 #include "App.hpp"
 
-
-App::App(): window{nullptr}, appState{AppState::MENU}, menuModel{nullptr}, menuView{nullptr}, menuController{nullptr}, levelModel{nullptr}, levelView{nullptr}, levelController{nullptr}
+App::App() : window{nullptr}, appState{AppState::MENU}, menuModel{nullptr}, menuView{nullptr}, menuController{nullptr}, levelModel{nullptr}, levelView{nullptr}, levelController{nullptr}
 {
     sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
-    window = new sf::RenderWindow(desktop, "Baba Is You", sf::Style::Default); // or sf::Style::Close
+    window = new sf::RenderWindow(desktop, "Baba Is You", sf::Style::Fullscreen); 
     window->setFramerateLimit(60);
-    window->setFramerateLimit(60);
-    menuModel = new MenuModel;
-    menuView = new MenuView{*window, *menuModel};
-    menuController = new MenuController{*window, *menuModel, *menuView};
 }
 
 App::~App()
@@ -20,7 +15,7 @@ App::~App()
         delete levelView;
         delete levelController;
     }
-    if (menuModel != nullptr)
+    else if (menuModel != nullptr)
     {
         delete menuModel;
         delete menuView;
@@ -36,24 +31,24 @@ void App::run()
     {
         switch (appState)
         {
-            case AppState::MENU:
-                this->processMenu();
-                break;
-            case AppState::LEVEL:
-                this->processLevel();
-                break;
-            case AppState::QUIT:
-                break;
+        case AppState::MENU:
+            this->processMenu();
+            break;
+        case AppState::LEVEL:
+            this->processLevel();
+            break;
+        case AppState::QUIT:
+            break;
         }
     }
 }
 
-void App::update(const Notification& notification)
+void App::update(const Notification &notification)
 {
-    const Victory* victory;
-    const Quit* quit;
-    victory = dynamic_cast<const Victory*>(&notification);
-    quit = dynamic_cast<const Quit*>(&notification);
+    const Victory *victory;
+    const Quit *quit;
+    victory = dynamic_cast<const Victory *>(&notification);
+    quit = dynamic_cast<const Quit *>(&notification);
     if (victory != nullptr)
         this->updateFromVictory();
     else if (quit != nullptr)
@@ -77,12 +72,11 @@ void App::changeState(AppState nextAppState)
 
 void App::initMenu()
 {
-    if (menuModel == nullptr)
-    {
-        menuModel = new MenuModel;
-        menuView = new MenuView{*window, *menuModel};
-        menuController = new MenuController{*window, *menuModel, *menuView};
-    }
+
+    menuModel = new MenuModel;
+    menuView = new MenuView{*window, *menuModel};
+    menuController = new MenuController{*window, *menuModel, *menuView};
+
     if (levelModel != nullptr)
     {
         delete levelModel;
@@ -112,14 +106,12 @@ void App::processMenu()
 
 void App::initLevel()
 {
-    if (levelModel == nullptr)
-    {
-        levelModel = new Model{menuController->getWhichLevelRequested()};
-        levelModel->addObserver(dynamic_cast<Observer*>(this));
-        levelView = new View{*levelModel, *window};
-        levelController = new Controller{*window, *levelModel};
-        levelController->addObserver(dynamic_cast<Observer*>(this));
-    }
+    levelModel = new Model{menuController->getWhichLevelRequested()};
+    levelModel->addObserver(dynamic_cast<Observer *>(this));
+    levelView = new View{*levelModel, *window};
+    levelController = new Controller{*window, *levelModel};
+    levelController->addObserver(dynamic_cast<Observer *>(this));
+
     if (menuModel != nullptr)
     {
         delete menuModel;

@@ -7,8 +7,8 @@
 
 #include <string>
 #include <vector>
-#include <fstream> 
-#include <sstream> 
+#include <fstream>
+#include <sstream>
 #include <iostream>
 #include <cmath>
 
@@ -21,45 +21,43 @@ class Board
 {
     friend class Model;
 
-    /* Le Model est responsable de la logique du jeu. Lorsqu'il est crée, le Model 
+    /* Le Model est responsable de la logique du jeu. Lorsqu'il est crée, le Model
         crée un Board en lui passant le niveau à charger. Seul lui doit pouvoir le faire
         (Singleton pattern).
     */
 
     friend class BoardSnapshot;
 
-    public:
-        // rule of three pour plus de sécurité
-        Board() = delete;
-        Board(const Board& board) = delete;
-        
+public:
+    // rule of three pour plus de sécurité
+    Board() = delete;
+    Board(const Board &board) = delete;
 
-        int getWidth() const;
-        int getHeight() const;
+    int getWidth() const;
+    int getHeight() const;
 
-        /* Le Model est responsable de la logique du jeu. Lorsqu'il est crée, le Model 
-        crée un Board en lui passant le niveau à charger. Seul lui doit pouvoir le faire
-        (Singleton pattern).
-        */
+    /* Le Model est responsable de la logique du jeu. Lorsqu'il est crée, le Model
+    crée un Board en lui passant le niveau à charger. Seul lui doit pouvoir le faire
+    (Singleton pattern).
+    */
 
+private:
+    explicit Board(int level); // explicit pour éviter les conversions implicites. usage : level1.txt
+    virtual ~Board();
 
-    private:
-        explicit Board(int level); // explicit pour éviter les conversions implicites. usage : level1.txt
-        virtual ~Board();
-        
-        Board& operator=(const BoardSnapshot& boardSnapshot); // surcharge pour restaurer un snapshot
-        const std::vector<BoardElement*>& operator()(int x, int y) const;
+    Board &operator=(const BoardSnapshot &boardSnapshot); // surcharge pour restaurer un snapshot
+    const std::vector<BoardElement *> &operator()(int x, int y) const;
 
-        void spawnBoardElement(BoardElementType boardElementType, int x, int y);
-        void createEmptyGrid(int width, int height); // utilisé lors de la création du board
+    void spawnBoardElement(BoardElementType boardElementType, int x, int y);
+    void createEmptyGrid(int width, int height); // utilisé lors de la création du board
 
-        const BoardSnapshot* makeSnapshot() const;
-        void setNewPosition(BoardElement* boardElement, int xNew, int yNew);
-        void killCell(int x, int y);
+    const BoardSnapshot *makeSnapshot() const;
+    void setNewPosition(BoardElement *boardElement, int xNew, int yNew);
+    void killCell(int x, int y);
 
-        std::vector<BoardElement*>** grid; // grille 3D dynamique de pointeurs vers BoardElement
-        int width;
-        int height;
+    std::vector<BoardElement *> **grid; // grille 3D dynamique de pointeurs vers BoardElement
+    int width;
+    int height;
 };
 
 #endif

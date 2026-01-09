@@ -17,39 +17,37 @@ class View
 {
 
     friend class App;
-    public:
 
-        View() = delete;
-        View(const View& view) = delete;
-        View& operator=(const View& view) = delete;
-        
+public:
+    View() = delete;
+    View(const View &view) = delete;
+    View &operator=(const View &view) = delete;
 
-    private:
+private:
+    View(Model &model, sf::RenderWindow &window);
+    virtual ~View();
 
-        View(Model& model, sf::RenderWindow& window);
-        virtual ~View();
+    void draw();
 
-        void draw();
+    void createTextures();
 
-        void createTextures();
+    void updateSpriteFromBoardElement(sf::Sprite &sprite, BoardElement &boardElement);
 
-        void updateSpriteFromBoardElement(sf::Sprite& sprite, BoardElement& boardElement);
+    float calculateSpritesScale();
 
-        float calculateSpritesScale();
+    int convertXGridToXScreen(int xGrid);
 
-        int convertXGridToXScreen(int xGrid);
+    int convertYGridToYScreen(int yGrid);
 
-        int convertYGridToYScreen(int yGrid);
+    /**
+     * @brief Dictionnaire entre le type des éléments du board
+     *        pouvant s'afficher à l'écran et leur texture correspondante.
+     */
+    std::unordered_map<BoardElementType, sf::Texture *> textures;
 
-        /**
-         * @brief Dictionnaire entre le type des éléments du board
-         *        pouvant s'afficher à l'écran et leur texture correspondante.
-         */
-        std::unordered_map<BoardElementType, sf::Texture*> textures;
+    Model &model;
 
-        Model& model;
-
-        sf::RenderWindow& window;
+    sf::RenderWindow &window;
 };
 
 #endif

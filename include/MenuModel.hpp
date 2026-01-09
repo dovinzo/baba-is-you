@@ -3,24 +3,22 @@
 
 #include "Enums.hpp"
 
-class App; 
+class App;
 class MenuController;
 
 class MenuModel
 {
     friend class App;
-    friend class MenuController;   
+    friend class MenuController;
 
-    
-    public:
-        MenuItem getMenuItem() const;
+public:
+    MenuItem getMenuItem() const;
 
-        
-    private:
-        MenuModel();
-        void next();
-        void previous();
-        MenuItem item;
+private:
+    MenuModel();
+    void next();
+    void previous();
+    MenuItem item;
 };
 
 #endif

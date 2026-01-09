@@ -11,74 +11,71 @@
 #include <vector>
 #include <set>
 
-/* Le Model gère toute la logique du jeu. Il reçoit du Controller les inputs de l'utilisateur. 
-C'est la "tête pensante" qui connait temps les règles que l'état du board à tout instant.  */
+/* Le Model gère toute la logique d'un niveau. Il est dirigé par le Controller selon les inputs
+directionnels de l'utilisateur. C'est la "tête pensante" qui connait temps les règles que l'état
+du board à tout instant.  */
+
 class Controller;
 class App;
 
-class Model: public Subject
+class Model : public Subject
 {
-    public:
+public:
+    Model() = delete;
+    Model &operator=(const Model &model) = delete;
+    Model(const Model &model) = delete;
 
-        Model() = delete;
-        Model& operator=(const Model& model) = delete;
-        Model(const Model& model) = delete;
+    int getBoardWidth() const;
+    int getBoardHeight() const;
 
-        int getBoardWidth() const;
-        int getBoardHeight() const;
-        std::vector<BoardElement*> getBoardCell(int x, int y) const;
+    friend class Controller; // pour handleEvent et accéder au board
+    friend class App;        // c'est l'app qui crée le model d'un niveau.
 
-        friend class Controller;
-        friend class App;
+    std::vector<BoardElement *> operator[](RuleProperty property) const; // renvoie tous les BoardElement possédant une RuleProperty donnée au vu des Rules courantes
+    const std::vector<BoardElement *> &operator()(int x, int y) const;
 
-    private:
-        virtual ~Model() = default;
-        Board board;
-        Rules rules;
-        BoardHistory boardHistory;
+private:
+    explicit Model(int level); // uniquement possible par l'App
+    virtual ~Model() = default;
 
-        explicit Model(int level); // uniquement possible par l'App
+    Board board;
+    Rules rules;
+    BoardHistory boardHistory;
 
-        // renvoie tous les BoardElement possédant une RuleProperty donnée au vu des Rules courantes
-        std::vector<BoardElement*> operator[](RuleProperty property) const;
+    // vérifie si les conditions de victoire sont remplies par un parcours du Board au vu des Rules
+    bool checkWin() const;
+    void sink();
 
-        // vérifie si les conditions de victoire sont remplies par un parcours du Board au vu des Rules
-        bool checkWin() const;
-        void sink() ;
+    // gestion de l'historique des déplacements pour undo/redo
+    bool undo();
+    bool redo();
 
-        // gestion de l'historique des déplacements pour undo/redo
-        bool undo();
-        bool redo();
+    void tryPush(int x, int y, std::set<BoardElement *> &visitedBoardElementsYou, Direction direction);
+    void tryMove(int x, int y, std::set<BoardElement *> &visitedBoardElementsYou, Direction direction);
 
-        void tryPush(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou, Direction direction);
+    // tentative de déplacement dans une des 4 directions
+    void move(Direction direction);
 
-        void tryMove(int x, int y, std::set<BoardElement*>& visitedBoardElementsYou, Direction direction);
+    // Traductions (cf. Rules.hpp et Enums.hpp)
+    // Table de traduction entre le boardElementType d'un BoardElement et ObjectToRuleSubject
+    // e.g BoardElementType::ROCK -> RuleSubject::ROCK
+    static RuleSubject ObjectToRuleSubject(BoardElementType boardElementType);
 
-        // tentative de déplacement dans une des 4 directions
-        void move(Direction direction);
+    // Traduction : e.g BoardElementType::TEXT_WALL -> RuleProperty::WALL
+    static RuleProperty TextPropertyToRuleProperty(BoardElementType boardElementType);
 
-        // Traductions (cf. Rules.hpp et Enums.hpp)
-        // Table de traduction entre le boardElementType d'un BoardElement et ObjectToRuleSubject
-        // e.g BoardElementType::ROCK -> RuleSubject::ROCK 
-        static RuleSubject ObjectToRuleSubject(BoardElementType boardElementType);
+    // E.g BoardElementType::TEXT_BABA -> RuleSubject::BABA
+    static RuleSubject TextObjectToRuleSubject(BoardElementType boardElementType);
 
-        // Traduction : e.g BoardElementType::TEXT_WALL -> RuleProperty::WALL
-        static RuleProperty TextPropertyToRuleProperty(BoardElementType boardElementType);
+    // vérifie si un BoardElement possède une RuleProperty donnée au vu des Rules courantes
+    bool boardElementHasProperty(BoardElement &boardElement, RuleProperty ruleProperty) const;
 
-        // E.g BoardElementType::TEXT_BABA -> RuleSubject::BABA
-        static RuleSubject TextObjectToRuleSubject(BoardElementType boardElementType);
+    bool isCellFree(int x, int y) const;
 
-        // vérifie si un BoardElement possède une RuleProperty donnée au vu des Rules courantes
-        bool boardElementHasProperty(BoardElement& boardElement, RuleProperty ruleProperty) const;
-
-        bool isCellFree(int x, int y) const;
-
-        // met à jour les règles en fonction des TextElements présents sur le Board
-        void updateRules();
-        void updateHorizontalRuleFromCell(int x, int y);
-        void updateVerticalRuleFromCell(int x, int y);
-
-        
+    // met à jour les règles en fonction des TextElements présents sur le Board
+    void updateRules();
+    void updateHorizontalRuleFromCell(int x, int y);
+    void updateVerticalRuleFromCell(int x, int y);
 };
 
 #endif

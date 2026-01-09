@@ -14,10 +14,10 @@ BoardHistory::~BoardHistory()
     }
 }
 
-void BoardHistory::push(const BoardSnapshot* boardSnapshot)
+void BoardHistory::push(const BoardSnapshot *boardSnapshot)
 {
 
-    if (boardSnapshotsForUndo.size() >= 100)     
+    if (boardSnapshotsForUndo.size() >= 100)
     {
         delete this->boardSnapshotsForUndo.front();
         this->boardSnapshotsForUndo.erase(this->boardSnapshotsForUndo.begin());
@@ -30,7 +30,7 @@ void BoardHistory::push(const BoardSnapshot* boardSnapshot)
     }
 }
 
-const BoardSnapshot* BoardHistory::undo()
+const BoardSnapshot *BoardHistory::undo()
 {
     if (this->boardSnapshotsForUndo.size() <= 1)
         return nullptr;
@@ -39,7 +39,7 @@ const BoardSnapshot* BoardHistory::undo()
     return this->boardSnapshotsForUndo.back();
 }
 
-const BoardSnapshot* BoardHistory::redo()
+const BoardSnapshot *BoardHistory::redo()
 {
     if (this->boardSnapshotsForRedo.size() == 0)
         return nullptr;

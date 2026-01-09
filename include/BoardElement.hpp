@@ -11,37 +11,34 @@ Par choix de conception, les règles ne sont pas encapsulés directement dans le
 class Board;
 class BoardSnapshot;
 
-
 class BoardElement
 {
-    public:
+public:
+    BoardElement() = delete;
+    BoardElement(const BoardElement &boardElement) = delete;
+    BoardElement &operator=(const BoardElement &boardElement) = delete;
 
-        BoardElement() = delete;
-        BoardElement(const BoardElement& boardElement) = delete;
-        BoardElement& operator=(const BoardElement& boardElement) = delete;
+    BoardElementCategory getCategory() const;
+    BoardElementType getType() const;
+    int getPositionX() const;
+    int getPositionY() const;
 
-        
+    // seuls les Board et BoardSnapshot peuvent en construire.
+    friend class Board;
+    friend class BoardSnapshot;
 
-        BoardElementCategory getCategory() const;
-        BoardElementType getType() const;
-        int getPositionX() const;
-        int getPositionY() const;
+private:
+    BoardElementType type;
 
-        // seuls les Board et BoardSnapshot peuvent en construire. 
-        friend class Board;
-        friend class BoardSnapshot;
-    private:
-        BoardElementType type;
-        
-        int x;
-        int y;
+    int x;
+    int y;
 
-        BoardElement(BoardElementType type, int x, int y);
-        virtual ~BoardElement() = default;
-        
-        static BoardElementType intToBoardElementType(int typeCode); // convertisseur lors de la création du niveau à partir d'un fichier txt.
-        void setPositionX(int x);
-        void setPositionY(int y);
+    BoardElement(BoardElementType type, int x, int y);
+    virtual ~BoardElement() = default;
+
+    static BoardElementType intToBoardElementType(int typeCode); // convertisseur lors de la création du niveau à partir d'un fichier txt.
+    void setPositionX(int x);
+    void setPositionY(int y);
 };
 
 #endif

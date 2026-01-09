@@ -3,8 +3,8 @@
 
 class Notification
 {
-    public:
-        virtual ~Notification() = default;
+public:
+    virtual ~Notification() = default;
 };
 
 #endif

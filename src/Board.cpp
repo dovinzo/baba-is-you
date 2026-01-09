@@ -1,25 +1,28 @@
 #include "Board.hpp"
 
-Board::Board(int level): grid{}, width{}, height{}
+Board::Board(int level) : grid{}, width{}, height{}
 {
     std::string filePath = "assets/level" + std::to_string(level) + ".txt";
     std::string line;
     int x, y, typeCode, width, height;
     BoardElementType boardElementType;
     std::ifstream file{filePath}; // ouvre le fichier en lecture
-    
-    if (!file.is_open()) {
+
+    if (!file.is_open())
+    {
         throw std::runtime_error("Impossible d'ouvrir " + filePath);
     }
 
-    if (!std::getline(file, line)) {
+    if (!std::getline(file, line))
+    {
         throw std::runtime_error("Problème de première ligne pour " + filePath);
     }
 
     std::istringstream iss{line};
     iss >> width >> height;
 
-    if ( std::floor(width) != width  || std::floor(height) != height) {
+    if (std::floor(width) != width || std::floor(height) != height)
+    {
         throw std::runtime_error("Problème de première ligne pour " + filePath);
     }
 
@@ -27,11 +30,13 @@ Board::Board(int level): grid{}, width{}, height{}
     while (std::getline(file, line))
     {
         std::istringstream iss{line};
-        if (!(iss >> x >> y >> typeCode)) continue;
+        if (!(iss >> x >> y >> typeCode))
+            continue;
 
         boardElementType = BoardElement::intToBoardElementType(typeCode);
 
-        if (x < 0 || x >= width || y < 0 || y >= height || boardElementType == BoardElementType::INVALID) {
+        if (x < 0 || x >= width || y < 0 || y >= height || boardElementType == BoardElementType::INVALID)
+        {
             std::cerr << "Mauvaise ligne, on skip dans " << filePath << ": " << line << '\n';
             continue;
         }
@@ -41,15 +46,15 @@ Board::Board(int level): grid{}, width{}, height{}
 
 Board::~Board()
 {
-    for (int i = 0 ; i < width ; i++)
+    for (int i = 0; i < width; i++)
     {
-        for (int j = 0 ; j < height ; j++)
+        for (int j = 0; j < height; j++)
         {
-           while (not grid[i][j].empty())
-           {
-               delete grid[i][j].back();
-               grid[i][j].pop_back();
-           }
+            while (not grid[i][j].empty())
+            {
+                delete grid[i][j].back();
+                grid[i][j].pop_back();
+            }
         }
         delete[] grid[i];
     }
@@ -60,10 +65,11 @@ void Board::createEmptyGrid(int width, int height)
 {
     this->width = width;
     this->height = height;
-    grid = new std::vector<BoardElement*>*[width]{nullptr};
-    for (int i = 0 ; i < width ; i++)
+    grid = new std::vector<BoardElement *> *[width]
+    { nullptr };
+    for (int i = 0; i < width; i++)
     {
-        grid[i] = new std::vector<BoardElement*>[height]{};
+        grid[i] = new std::vector<BoardElement *>[height] {};
     }
 }
 
@@ -77,13 +83,13 @@ int Board::getHeight() const
     return height;
 }
 
-void Board::setNewPosition(BoardElement* boardElement, int xNew, int yNew)
+void Board::setNewPosition(BoardElement *boardElement, int xNew, int yNew)
 {
     int xOld{boardElement->getPositionX()};
     int yOld{boardElement->getPositionY()};
     boardElement->setPositionX(xNew);
     boardElement->setPositionY(yNew);
-    for (int i = 0 ; i < static_cast<int>(grid[xOld][yOld].size()) ; i++)
+    for (int i = 0; i < static_cast<int>(grid[xOld][yOld].size()); i++)
     {
         if (grid[xOld][yOld].at(i) == boardElement)
         {
@@ -94,26 +100,26 @@ void Board::setNewPosition(BoardElement* boardElement, int xNew, int yNew)
     }
 }
 
-const BoardSnapshot* Board::makeSnapshot() const
+const BoardSnapshot *Board::makeSnapshot() const
 {
     return new BoardSnapshot{*this};
 }
 
-Board& Board::operator=(const BoardSnapshot& boardSnapshot)
+Board &Board::operator=(const BoardSnapshot &boardSnapshot)
 {
-    for (int x = 0 ; x < width ; x++)
+    for (int x = 0; x < width; x++)
     {
-        for (int y = 0 ; y < height ; y++)
+        for (int y = 0; y < height; y++)
         {
-            while (not (*this)(x,y).empty())
+            while (not grid[x][y].empty())
             {
-                delete (*this)(x,y).back();
-                (*this)(x,y).pop_back();
-           }
-           for (int i = 0 ; i < static_cast<int>(boardSnapshot(x,y).size()) ; i++)
-           {
-               (*this)(x,y).push_back(new BoardElement{boardSnapshot(x,y)[i]->getType(), x, y});
-           }
+                delete grid[x][y].back();
+                grid[x][y].pop_back();
+            }
+            for (int i = 0; i < static_cast<int>(boardSnapshot(x, y).size()); i++)
+            {
+                grid[x][y].push_back(new BoardElement{boardSnapshot(x, y)[i]->getType(), x, y});
+            }
         }
     }
     return *this;
@@ -121,19 +127,10 @@ Board& Board::operator=(const BoardSnapshot& boardSnapshot)
 
 void Board::spawnBoardElement(BoardElementType boardElementType, int x, int y)
 {
-    (*this)(x,y).push_back(new BoardElement{boardElementType, x, y});
+    grid[x][y].push_back(new BoardElement{boardElementType, x, y});
 }
 
-std::vector<BoardElement*>& Board::operator()(int x, int y)
-{
-    if (x < 0 || x >= width || y < 0 || y >= height)
-    {
-        throw std::out_of_range{"Board::operator(): coordonnées (" + std::to_string(x) + ", " + std::to_string(y) + ") hors de la grille."};
-    }
-    return grid[x][y];
-}
-
-const std::vector<BoardElement*>& Board::operator()(int x, int y) const
+const std::vector<BoardElement *> &Board::operator()(int x, int y) const
 {
     if (x < 0 || x >= width || y < 0 || y >= height)
     {
@@ -144,9 +141,9 @@ const std::vector<BoardElement*>& Board::operator()(int x, int y) const
 
 void Board::killCell(int x, int y)
 {
-    while (not (*this)(x,y).empty())
+    while (not grid[x][y].empty())
     {
-        delete (*this)(x,y).back();
-        (*this)(x,y).pop_back();
+        delete grid[x][y].back();
+        grid[x][y].pop_back();
     }
-} 
+}

@@ -21,14 +21,14 @@ enum class BoardElementType
     TEXT_WIN,
     TEXT_WATER,
     TEXT_SINK,
-    INVALID // permet de gérer les exceptions. 
+    INVALID // permet de gérer les exceptions.
 };
 
 // Une rule est un élément de type 'Object' + IS + 'Property'.
 /* Si cette implémentation à le mérite d'éviter de gérer tous les cas possibles en
-imposant une grammaire claire, elle manque aussi de développement possible. 
-Gérer les Baba is Wall, par exemple, sera compliqué.  */ 
-enum class BoardElementCategory 
+imposant une grammaire claire, elle manque aussi de développement possible.
+Gérer les Baba is Wall, par exemple, sera compliqué.  */
+enum class BoardElementCategory
 {
     OBJECT,
     TEXT_OBJECT,
@@ -75,7 +75,7 @@ enum class AppState
 };
 
 // Une autre implémentation, qui viendrait compter le nombre de fichier .txt dans les src
-// serait préférable. 
+// serait préférable.
 enum class MenuItem
 {
     LEVEL1,

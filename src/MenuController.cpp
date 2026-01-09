@@ -1,6 +1,6 @@
 #include "MenuController.hpp"
 
-MenuController::MenuController(sf::RenderWindow& window, MenuModel& menuModel, MenuView& menuView): window{window}, menuModel{menuModel}, menuView{menuView}, levelRequested{false}, whichLevelRequested{}, quitRequested{false}
+MenuController::MenuController(sf::RenderWindow &window, MenuModel &menuModel, MenuView &menuView) : window{window}, menuModel{menuModel}, menuView{menuView}, levelRequested{false}, whichLevelRequested{}, quitRequested{false}
 {
 }
 
@@ -52,15 +52,15 @@ int MenuController::whichLevel(MenuItem menuItem)
     int whichLevelRequested;
     switch (menuItem)
     {
-        case MenuItem::LEVEL1:
-            whichLevelRequested = 1;
-            break;
-        case MenuItem::LEVEL2:
-            whichLevelRequested = 2;
-            break;
-        case MenuItem::LEVEL3:
-            whichLevelRequested = 3;
-            break;
+    case MenuItem::LEVEL1:
+        whichLevelRequested = 1;
+        break;
+    case MenuItem::LEVEL2:
+        whichLevelRequested = 2;
+        break;
+    case MenuItem::LEVEL3:
+        whichLevelRequested = 3;
+        break;
     }
     return whichLevelRequested;
 }

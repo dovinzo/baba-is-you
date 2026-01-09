@@ -6,9 +6,9 @@
 
 class Observer
 {
-    public:
-        virtual ~Observer() = default;
-        virtual void update(const Notification& notification) = 0;
+public:
+    virtual ~Observer() = default;
+    virtual void update(const Notification &notification) = 0;
 };
 
 #endif

@@ -13,21 +13,21 @@ implémentation, car il se contente de gérer les inputs de l'utilisateurs. */
 
 class App;
 
-class Controller: public Subject
+class Controller : public Subject
 {
-    public:
-        Controller() = delete;
+public:
+    Controller() = delete;
 
-        friend class App;
-    private:
+    friend class App;
 
-        virtual ~Controller() = default;
-        Controller(sf::RenderWindow& window, Model& model); // uniquement possible par l'App
-        void handleEvent(); // gère les inputs
+private:
+    virtual ~Controller() = default;
+    Controller(sf::RenderWindow &window, Model &model); // uniquement possible par l'App
+    void handleEvent();                                 // gère les inputs
 
-        // envoie les input au modèle
-        sf::RenderWindow& window; 
-        Model& model;
+    // envoie les input au modèle
+    sf::RenderWindow &window;
+    Model &model;
 };
 
 #endif
