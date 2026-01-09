@@ -2,7 +2,7 @@
 
 # Dépendances 
 
-Ce projet nécessite SFML 2.6. 
+Ce projet nécessite SFML 2.5. 
 
 # Lancer le jeu
 
